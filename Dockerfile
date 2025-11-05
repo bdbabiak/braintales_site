@@ -1,38 +1,26 @@
-# ---- Build stage ----
-FROM node:20-alpine AS builder
+# ---- simple one-stage build & run ----
+FROM node:20-alpine
 WORKDIR /app
 
-# Use pnpm (adjust if you use npm/yarn)
-RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
+# Use pnpm; adjust the version if Render logs show a different one
+RUN corepack enable && corepack prepare pnpm@10.18.1 --activate
 
-# Install deps
+# Copy lockfile + root package.json first for better layer caching
 COPY package.json pnpm-lock.yaml ./
-# If you have workspaces, copy their manifests so pnpm can resolve them:
-# (these exist in your repo based on earlier zips)
-COPY client/package.json server/package.json ./
+
+# Install workspace deps (your root package.json/lock already references client/server)
 RUN pnpm install --frozen-lockfile
 
-# Copy source
+# Copy the rest of the source
 COPY . .
 
-# Build client and server (adjust if your scripts differ)
-# Typical monorepo: client outputs to client/dist; server compiles TS to server/dist
-RUN pnpm -r build
+# Build both client and server as your package.json currently does:
+# "build": "vite build && esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist"
+RUN pnpm run build
 
-# ---- Runtime stage ----
-FROM node:20-alpine AS runtime
-WORKDIR /app
 ENV NODE_ENV=production
-
-# Bring runtime files
-COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/client/dist ./client/dist
-COPY --from=builder /app/server/dist ./server/dist
-COPY --from=builder /app/drizzle ./drizzle
-
-# The compiled server entry from your codebase:
-# (earlier we verified server/_core/index.ts is the entry)
 ENV PORT=3000
 EXPOSE 3000
-CMD ["node", "server/dist/_core/index.js"]
+
+# Your build logs show the bundled server entry is dist/index.js
+CMD ["node", "dist/index.js"]
