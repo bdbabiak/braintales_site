@@ -1,0 +1,58 @@
+{
+  "query": "SELECT asin, rating, reviewCount, lastFetched FROM bookRatingsCache ORDER BY lastFetched DESC LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user kBUcNMd4K3nboE5.root --database 6GAsypHLhsf5ydrCncrKzm --execute SELECT asin, rating, reviewCount, lastFetched FROM bookRatingsCache ORDER BY lastFetched DESC LIMIT 20;",
+  "rows": [
+    {
+      "asin": "B0FV12PD5D",
+      "rating": "2",
+      "reviewCount": "1",
+      "lastFetched": "2025-11-03 11:45:05"
+    },
+    {
+      "asin": "B0FTPZF51N",
+      "rating": "5",
+      "reviewCount": "3",
+      "lastFetched": "2025-11-03 11:45:05"
+    },
+    {
+      "asin": "B0FWTY1VVS",
+      "rating": "4.8",
+      "reviewCount": "29",
+      "lastFetched": "2025-11-03 11:00:00"
+    },
+    {
+      "asin": "B0FXT51Y14",
+      "rating": "4.8",
+      "reviewCount": "19",
+      "lastFetched": "2025-11-03 11:00:00"
+    },
+    {
+      "asin": "B0FSSW9XGX",
+      "rating": "5",
+      "reviewCount": "19",
+      "lastFetched": "2025-11-03 10:59:58"
+    },
+    {
+      "asin": "B0FP9MRCJM",
+      "rating": "4.4",
+      "reviewCount": "14",
+      "lastFetched": "2025-11-03 10:59:52"
+    },
+    {
+      "asin": "B0FN3M4DFZ",
+      "rating": "5",
+      "reviewCount": "3",
+      "lastFetched": "2025-11-03 10:59:52"
+    },
+    {
+      "asin": "B0FVF3ZRJQ",
+      "rating": "4.3",
+      "reviewCount": "8",
+      "lastFetched": "2025-11-03 10:59:52"
+    }
+  ],
+  "messages": [],
+  "stdout": "asin\trating\treviewCount\tlastFetched\nB0FV12PD5D\t2\t1\t2025-11-03 11:45:05\nB0FTPZF51N\t5\t3\t2025-11-03 11:45:05\nB0FWTY1VVS\t4.8\t29\t2025-11-03 11:00:00\nB0FXT51Y14\t4.8\t19\t2025-11-03 11:00:00\nB0FSSW9XGX\t5\t19\t2025-11-03 10:59:58\nB0FP9MRCJM\t4.4\t14\t2025-11-03 10:59:52\nB0FN3M4DFZ\t5\t3\t2025-11-03 10:59:52\nB0FVF3ZRJQ\t4.3\t8\t2025-11-03 10:59:52\n",
+  "stderr": "",
+  "execution_time_ms": 1122
+}

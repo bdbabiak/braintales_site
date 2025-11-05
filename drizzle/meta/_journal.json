@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1762021887045,
+      "tag": "0000_pale_magik",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1762145886083,
+      "tag": "0001_tense_hellcat",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1762233818792,
+      "tag": "0002_spotty_millenium_guard",
+      "breakpoints": true
+    }
+  ]
+}

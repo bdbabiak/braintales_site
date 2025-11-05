@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <link rel="icon" type="image/png" href="%VITE_APP_LOGO%" />
+    <link rel="apple-touch-icon" href="%VITE_APP_LOGO%" />
+    <title>%VITE_APP_TITLE%</title>
+    
+    <!-- Privacy-friendly analytics by Plausible -->
+    <!-- CURRENT: Direct Plausible (works for desktop/YouTube, blocked by TikTok in-app browser) -->
+    <script defer data-spa="auto" src="https://plausible.io/js/pa-wuRFfVgao7BaT5Fb2CiZe.js"></script>
+    
+    <!-- PROXY MODE: Uncomment below and comment out above after setting up proxy routes -->
+    <!-- This serves Plausible from YOUR domain to bypass TikTok/adblocker blocks -->
+    <!-- See PLAUSIBLE_PROXY_SETUP.md for instructions -->
+    <!--
+    <script defer 
+            data-spa="auto"
+            data-domain="braintales.net"
+            data-api="/api/event"
+            src="/js/script.js"></script>
+    -->
+    
+    <script>
+      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()
+    </script>
+    
+    <!-- Add Google Fonts here, example:
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    -->
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script
+      defer
+      src="%VITE_ANALYTICS_ENDPOINT%/umami"
+      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+  </body>
+
+</html>
