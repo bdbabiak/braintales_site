@@ -29,7 +29,111 @@ import { Analytics } from "@/lib/analytics";
 //   featured?: boolean;
 // }
 //
-// const books: Book[] = [ ...your current array... ];
+// const books: Book[] = [
+  {
+    id: 1,
+    title: "The ADHD Brain",
+    subtitle: "An Immersive Journey Through Science, Struggle and Strength",
+    cover: "/adhdbrainkindlecover.jpg",
+    type: "Non-Fiction",
+    amazonLink: "https://www.amazon.com/dp/B0FWTY1VVS",
+    asin: "B0FWTY1VVS",
+    videoId: "a06lqBas4gE",
+    featured: true,
+    blurb: [
+      "A clinician-led guide grounded in neuroscience and real-world experience",
+      "Explains how ADHD unfolds across the lifespan—adults, women, late diagnosis",
+      "Covers diagnosis, treatment options from medication to lifestyle strategies",
+      "Deep dives into hormones, sleep, time management, work, relationships",
+      "Connects science, struggle, and strength to help you understand, treat, and thrive"
+    ]
+  },
+  {
+    id: 2,
+    title: "Trading Psychology & Neuroscience",
+    subtitle: "The Rational Mind in an Irrational Market",
+    cover: "/tradingpsychology&neurosciencecoverkindle.png",
+    type: "Non-Fiction",
+    amazonLink: "https://www.amazon.com/dp/B0FXT51Y14",
+    asin: "B0FXT51Y14",
+    videoId: "gxYWIPMO1aQ",
+    blurb: [
+      "Behavioral finance fused with neuroscience for traders",
+      "Clinical protocols for emotion regulation and trader mindset",
+      "HRV training, biofeedback, coherence breathing techniques",
+      "Neutralize cognitive biases: loss aversion, FOMO, revenge trading",
+      "A field manual for disciplined decisions under uncertainty"
+    ]
+  },
+  {
+    id: 3,
+    title: "Epicurus 2.0",
+    subtitle: "Why You Don't Matter (And Why That's The Best News You'll Get)",
+    cover: "/epicurus2.0cover.jpg",
+    type: "Non-Fiction",
+    amazonLink: "https://www.amazon.com/dp/B0FVF3ZRJQ",
+    asin: "B0FVF3ZRJQ",
+    videoId: "6TkwcTsbonI",
+    blurb: [
+      "Ancient Epicurean philosophy meets modern neuroscience",
+      "Freedom from realizing you don't have a fixed 'self' to perfect",
+      "Science-backed protocols: Capability Reframing, Metric Fasting, 5-4-3-2-1 Audit",
+      "Buddhism for skeptics—enlightenment without mysticism",
+      "The last self-help book you'll ever need"
+    ]
+  },
+  {
+    id: 4,
+    title: "The Doubles",
+    subtitle: "Ghosts of the Podium",
+    cover: "/thedoubles-ghostsofthepodiumaudiblecover.jpg",
+    type: "Fiction",
+    amazonLink: "https://www.amazon.com/dp/B0FSSW9XGX",
+    asin: "B0FSSW9XGX",
+    videoId: "HX76hcX2JJs",
+    blurb: [
+      "Political intrigue meets psychological thriller",
+      "When body doubles become more real than their originals",
+      "A gripping tale of identity, power, and deception",
+      "Explores the blurred lines between authenticity and performance",
+      "A mind-bending journey through the corridors of power"
+    ]
+  },
+  {
+    id: 5,
+    title: "Grandma's Illegal Dragon Racing Circuit",
+    subtitle: "",
+    cover: "/grandma'sillegaldragonracingcircuitaudiblecover.png",
+    type: "Fiction",
+    amazonLink: "https://www.amazon.com/dp/B0FP9MRCJM",
+    asin: "B0FP9MRCJM",
+    videoId: "MmznNdNQIFs",
+    blurb: [
+      "Absurdist sci-fi satire where no one is expendable",
+      "Your weirdness is your value—resistance wrapped in laughter",
+      "Kurt Vonnegut meets Terry Pratchett in this cosmic comedy",
+      "Dragons, spreadsheets, and cosmic nachos collide",
+      "Funny, necessary, and defiantly optimistic"
+    ]
+  },
+  {
+    id: 6,
+    title: "The Sight Eater",
+    subtitle: "A Speculative Dark Comedy About Love, Bureaucracy, and the Logistics of Monstrosity",
+    cover: "/the_sight_eater_book_cover.jpg",
+    type: "Fiction",
+    amazonLink: "https://www.amazon.com/dp/B0FN3M4DFZ",
+    asin: "B0FN3M4DFZ",
+    videoId: "rgL0ugCablw",
+    blurb: [
+      "A blind woman sees by eating eyes; a man grows them—love blooms in the grotesque",
+      "Body horror meets tender romance in near-future Warsaw",
+      "When love becomes regulated, intimacy becomes rebellion",
+      "Kafka meets Cronenberg in this daring genre-defying masterpiece",
+      "For fans of VanderMeer, Moshfegh—speculative horror that's hilarious and unexpectedly tender"
+    ]
+  }
+];
 // ------------------------------------------------------------------
 interface Book {
   id: number;
