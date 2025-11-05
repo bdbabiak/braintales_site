@@ -1,26 +1,28 @@
-# ---- simple one-stage build & run ----
 FROM node:20-alpine
 WORKDIR /app
 
-# Use pnpm; adjust the version if Render logs show a different one
+# Use pnpm (match what corepack downloaded earlier)
 RUN corepack enable && corepack prepare pnpm@10.18.1 --activate
 
-# Copy lockfile + root package.json first for better layer caching
+# 1) Copy lock + manifest (for layer caching)
 COPY package.json pnpm-lock.yaml ./
 
-# Install workspace deps (your root package.json/lock already references client/server)
+# 2) Copy pnpm patches BEFORE install (so patchedDependencies can resolve)
+# If you have a 'patches' folder in the repo (you do), copy it now:
+COPY patches ./patches
+
+# 3) Install dependencies (resolves patchedDependencies)
 RUN pnpm install --frozen-lockfile
 
-# Copy the rest of the source
+# 4) Copy the rest of the source
 COPY . .
 
-# Build both client and server as your package.json currently does:
-# "build": "vite build && esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist"
+# 5) Build (your root build already runs: vite build -> dist/public and esbuild -> dist/index.js)
 RUN pnpm run build
 
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 
-# Your build logs show the bundled server entry is dist/index.js
+# Server bundle path per your build logs
 CMD ["node", "dist/index.js"]
