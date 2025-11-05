@@ -1,0 +1,4 @@
+{
+  "builds": [{ "src": "Dockerfile", "use": "@vercel/docker" }],
+  "probes": [{ "path": "/", "interval": 10000, "timeout": 5000, "initialDelay": 1000 }]
+}
