@@ -1,28 +1,24 @@
 FROM node:20-alpine
 WORKDIR /app
 
-# Use pnpm (match what corepack downloaded earlier)
+# Use pnpm
 RUN corepack enable && corepack prepare pnpm@10.18.1 --activate
 
-# 1) Copy lock + manifest (for layer caching)
+# Copy manifests first (for layer cache)
 COPY package.json pnpm-lock.yaml ./
-
-# 2) Copy pnpm patches BEFORE install (so patchedDependencies can resolve)
-# If you have a 'patches' folder in the repo (you do), copy it now:
+# copy patches before install (you have `patches/wouter@3.7.1.patch`)
 COPY patches ./patches
 
-# 3) Install dependencies (resolves patchedDependencies)
-RUN pnpm install --frozen-lockfile
+# IMPORTANT: allow build scripts so esbuild can install its binary
+RUN pnpm config set ignore-scripts false \
+ && pnpm config set allow-scripts "@esbuild/.*" "@tailwindcss/oxide" \
+ && pnpm install --frozen-lockfile
 
-# 4) Copy the rest of the source
+# Now copy the rest and build
 COPY . .
-
-# 5) Build (your root build already runs: vite build -> dist/public and esbuild -> dist/index.js)
 RUN pnpm run build
 
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
-
-# Server bundle path per your build logs
 CMD ["node", "dist/index.js"]
