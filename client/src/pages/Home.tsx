@@ -10,30 +10,26 @@ import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { Analytics } from "@/lib/analytics";
 
-/** ----------------------------------------------------------------
- *  BOOKS DATA
- *  Paste your existing books array here exactly as in your file.
- *  (Do not change titles/asin/videoId/etc.)
- * ---------------------------------------------------------------- */
-// Example shape for reference:
-// interface Book {
-//   id: number;
-//   title: string;
-//   subtitle?: string;
-//   type?: string;
-//   cover: string;
-//   amazonLink: string;
-//   asin: string;
-//   videoId?: string;
-//   blurb: string[];
-//   featured?: boolean;
-// }
-//
-// const books: Book[] = [
+interface Book {
+  id: number;
+  title: string;
+  subtitle?: string;
+  type?: string;
+  cover: string;
+  amazonLink: string;
+  asin: string;
+  videoId?: string;
+  blurb: string[];
+  featured?: boolean;
+}
+
+// === Your books (fixed: one array, not commented, no duplicate) ===
+const books: Book[] = [
   {
     id: 1,
     title: "The ADHD Brain",
-    subtitle: "An Immersive Journey Through Science, Struggle and Strength",
+    subtitle:
+      "An Immersive Journey Through Science, Struggle and Strength",
     cover: "/adhdbrainkindlecover.jpg",
     type: "Non-Fiction",
     amazonLink: "https://www.amazon.com/dp/B0FWTY1VVS",
@@ -45,8 +41,8 @@ import { Analytics } from "@/lib/analytics";
       "Explains how ADHD unfolds across the lifespan—adults, women, late diagnosis",
       "Covers diagnosis, treatment options from medication to lifestyle strategies",
       "Deep dives into hormones, sleep, time management, work, relationships",
-      "Connects science, struggle, and strength to help you understand, treat, and thrive"
-    ]
+      "Connects science, struggle, and strength to help you understand, treat, and thrive",
+    ],
   },
   {
     id: 2,
@@ -62,13 +58,15 @@ import { Analytics } from "@/lib/analytics";
       "Clinical protocols for emotion regulation and trader mindset",
       "HRV training, biofeedback, coherence breathing techniques",
       "Neutralize cognitive biases: loss aversion, FOMO, revenge trading",
-      "A field manual for disciplined decisions under uncertainty"
-    ]
+      "A field manual for disciplined decisions under uncertainty",
+    ],
   },
   {
     id: 3,
-    title: "Epicurus 2.0",
-    subtitle: "Why You Don't Matter (And Why That's The Best News You'll Get)",
+    title:
+      "Epicurus 2.0",
+    subtitle:
+      "Why You Don't Matter (And Why That's The Best News You'll Get)",
     cover: "/epicurus2.0cover.jpg",
     type: "Non-Fiction",
     amazonLink: "https://www.amazon.com/dp/B0FVF3ZRJQ",
@@ -79,8 +77,8 @@ import { Analytics } from "@/lib/analytics";
       "Freedom from realizing you don't have a fixed 'self' to perfect",
       "Science-backed protocols: Capability Reframing, Metric Fasting, 5-4-3-2-1 Audit",
       "Buddhism for skeptics—enlightenment without mysticism",
-      "The last self-help book you'll ever need"
-    ]
+      "The last self-help book you'll ever need",
+    ],
   },
   {
     id: 4,
@@ -96,8 +94,8 @@ import { Analytics } from "@/lib/analytics";
       "When body doubles become more real than their originals",
       "A gripping tale of identity, power, and deception",
       "Explores the blurred lines between authenticity and performance",
-      "A mind-bending journey through the corridors of power"
-    ]
+      "A mind-bending journey through the corridors of power",
+    ],
   },
   {
     id: 5,
@@ -113,13 +111,14 @@ import { Analytics } from "@/lib/analytics";
       "Your weirdness is your value—resistance wrapped in laughter",
       "Kurt Vonnegut meets Terry Pratchett in this cosmic comedy",
       "Dragons, spreadsheets, and cosmic nachos collide",
-      "Funny, necessary, and defiantly optimistic"
-    ]
+      "Funny, necessary, and defiantly optimistic",
+    ],
   },
   {
     id: 6,
     title: "The Sight Eater",
-    subtitle: "A Speculative Dark Comedy About Love, Bureaucracy, and the Logistics of Monstrosity",
+    subtitle:
+      "A Speculative Dark Comedy About Love, Bureaucracy, and the Logistics of Monstrosity",
     cover: "/the_sight_eater_book_cover.jpg",
     type: "Fiction",
     amazonLink: "https://www.amazon.com/dp/B0FN3M4DFZ",
@@ -130,75 +129,46 @@ import { Analytics } from "@/lib/analytics";
       "Body horror meets tender romance in near-future Warsaw",
       "When love becomes regulated, intimacy becomes rebellion",
       "Kafka meets Cronenberg in this daring genre-defying masterpiece",
-      "For fans of VanderMeer, Moshfegh—speculative horror that's hilarious and unexpectedly tender"
-    ]
-  }
-];
-// ------------------------------------------------------------------
-interface Book {
-  id: number;
-  title: string;
-  subtitle?: string;
-  type?: string;
-  cover: string;
-  amazonLink: string;
-  asin: string;
-  videoId?: string;
-  blurb: string[];
-  featured?: boolean;
-}
-
-// ⬇️ REPLACE this dummy array with your real one from your current file
-const books: Book[] = [
-  // ...PASTE YOUR EXISTING BOOKS ARRAY HERE (unchanged)...
+      "Speculative horror that's hilarious and unexpectedly tender",
+    ],
+  },
 ];
 
 export default function Home() {
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  /** ******************************************************************
-   * FIX: Only one video active at a time
-   * We track a single activeVideoId (or null). Toggling a different card
-   * unmounts any previous iframe (which stops its playback).
-   ******************************************************************* */
+  // Only one active trailer at a time
   const [activeVideoId, setActiveVideoId] = useState<number | null>(null);
-
-  const toggleVideo = (bookId: number) => {
-    setActiveVideoId(prev => (prev === bookId ? null : bookId));
-  };
+  const toggleVideo = (bookId: number) =>
+    setActiveVideoId((prev) => (prev === bookId ? null : bookId));
 
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Fetch ratings for all books (memoized ASINs)
-  const asins = useMemo(() => books.map(b => b.asin), []);
+  // Ratings (memoized ASINs)
+  const asins = useMemo(() => books.map((b) => b.asin), []);
   const { data: ratingsData } = trpc.books.getRatings.useQuery(
     { asins },
     { refetchOnWindowFocus: false, refetchOnMount: false }
   );
+  const getRating = (asin: string) => ratingsData?.find((r) => r.asin === asin);
 
-  const getRating = (asin: string) =>
-    ratingsData?.find(r => r.asin === asin);
+  const featuredBook = books.find((b) => b.featured);
+  const regularBooks = books.filter((b) => !b.featured);
 
-  const featuredBook = books.find(b => b.featured);
-  const regularBooks = books.filter(b => !b.featured);
-
-  // Search filter
   const filteredBooks = useMemo(() => {
     if (!searchQuery.trim()) return regularBooks;
     const q = searchQuery.toLowerCase();
-    return regularBooks.filter(b => {
+    return regularBooks.filter((b) => {
       const t = b.title.toLowerCase().includes(q);
       const s = (b.subtitle ?? "").toLowerCase().includes(q);
-      const blurbs = b.blurb.some(x => x.toLowerCase().includes(q));
+      const blurbs = b.blurb.some((x) => x.toLowerCase().includes(q));
       return t || s || blurbs;
     });
   }, [searchQuery, regularBooks]);
 
-  // Share helper (unchanged)
   const shareBook = (book: Book) => {
     try {
       navigator.clipboard.writeText(
@@ -214,7 +184,6 @@ export default function Home() {
     } catch {}
   };
 
-  // Card renderer (handle featured sizing)
   const renderBookCard = (book: Book, large = false) => {
     const rating = getRating(book.asin);
     const isActive = activeVideoId === book.id;
@@ -227,11 +196,11 @@ export default function Home() {
         }`}
       >
         <div className={`p-6 space-y-4 ${large ? "md:p-8" : ""}`}>
-          {/* Book Cover or Video */}
+          {/* Cover or trailer */}
           <div className="relative aspect-[2/3] overflow-hidden rounded-lg group">
             {isActive && book.videoId ? (
               <iframe
-                key={book.videoId} // ensure fresh mount so previous iframe is destroyed
+                key={book.videoId}
                 src={`https://www.youtube.com/embed/${book.videoId}?autoplay=1`}
                 title={book.title}
                 className="w-full h-full"
@@ -245,7 +214,6 @@ export default function Home() {
                   alt={`${book.title} cover`}
                   className="w-full h-full object-cover rounded-lg group-hover:opacity-90 transition-opacity"
                 />
-                {/* Play overlay (only if a video exists) */}
                 {book.videoId && (
                   <button
                     type="button"
@@ -297,7 +265,7 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Book Info */}
+          {/* Info */}
           <div className="space-y-2">
             <h3
               className={`font-bold text-white leading-tight ${
@@ -316,7 +284,6 @@ export default function Home() {
                 {book.type}
               </p>
             )}
-            {/* Ratings (1-decimal) */}
             {rating && (
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1">
@@ -355,7 +322,7 @@ export default function Home() {
       <div className="flex items-center justify-between py-4">
         <button
           className="p-2 text-slate-300 hover:text-white md:hidden"
-          onClick={() => setMobileMenuOpen(v => !v)}
+          onClick={() => setMobileMenuOpen((v) => !v)}
           aria-label="Toggle menu"
         >
           <Menu className="w-5 h-5" />
@@ -382,7 +349,7 @@ export default function Home() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <Input
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search titles, taglines, or blurbs…"
             className="pl-9 bg-slate-900/60 border-slate-700 text-slate-100 placeholder:text-slate-500"
           />
@@ -410,7 +377,7 @@ export default function Home() {
 
       {/* Grid of regular books */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredBooks.map(b => renderBookCard(b))}
+        {filteredBooks.map((b) => renderBookCard(b))}
       </div>
 
       {/* View all on Amazon */}
