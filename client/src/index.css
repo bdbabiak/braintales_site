@@ -177,9 +177,10 @@
 
 /* 1. 3D Book Cover Hover Effects */
 .book-cover-3d {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
   transform-style: preserve-3d;
   position: relative;
+  will-change: transform;
 }
 
 .book-cover-3d::before {
@@ -193,7 +194,7 @@
     transparent 50%
   );
   opacity: 0;
-  transition: opacity 0.4s;
+  transition: opacity 0.3s;
   pointer-events: none;
 }
 
@@ -202,11 +203,10 @@
     perspective(1000px) 
     rotateY(-8deg) 
     rotateX(3deg) 
-    translateZ(20px) 
     scale(1.05);
   box-shadow: 
-    25px 25px 50px rgba(0, 0, 0, 0.5),
-    -10px -10px 30px rgba(59, 130, 246, 0.1);
+    15px 15px 30px rgba(0, 0, 0, 0.3),
+    -5px -5px 15px rgba(59, 130, 246, 0.1);
 }
 
 .book-cover-3d:hover::before {
@@ -217,34 +217,9 @@
 @keyframes twinkle {
   0%, 100% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
   }
-  25% {
+  50% {
     opacity: 0.6;
-    transform: scale(0.9) rotate(-5deg);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.1) rotate(5deg);
-  }
-  75% {
-    opacity: 0.7;
-    transform: scale(0.95) rotate(-3deg);
-  }
-}
-
-@keyframes star-pop {
-  0% {
-    transform: scale(0) rotate(0deg);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.3) rotate(180deg);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) rotate(360deg);
-    opacity: 1;
   }
 }
 
@@ -254,27 +229,24 @@
 }
 
 .star-rating .star-animated {
-  transition: all 0.3s ease;
-  animation: twinkle 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+  transition: opacity 0.3s ease;
+  animation: twinkle 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.4));
 }
 
 .star-rating .star-animated:nth-child(1) { animation-delay: 0s; }
-.star-rating .star-animated:nth-child(2) { animation-delay: 0.3s; }
-.star-rating .star-animated:nth-child(3) { animation-delay: 0.6s; }
-.star-rating .star-animated:nth-child(4) { animation-delay: 0.9s; }
-.star-rating .star-animated:nth-child(5) { animation-delay: 1.2s; }
+.star-rating .star-animated:nth-child(2) { animation-delay: 0.4s; }
+.star-rating .star-animated:nth-child(3) { animation-delay: 0.8s; }
+.star-rating .star-animated:nth-child(4) { animation-delay: 1.2s; }
+.star-rating .star-animated:nth-child(5) { animation-delay: 1.6s; }
 
 /* 3. Gradient Text Animation */
 @keyframes gradient-shift {
-  0% {
+  0%, 100% {
     background-position: 0% 50%;
   }
   50% {
     background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
   }
 }
 
@@ -286,11 +258,11 @@
     #f472b6,
     #60a5fa
   );
-  background-size: 300% 300%;
+  background-size: 200% 200%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 6s ease infinite;
+  animation: gradient-shift 8s ease infinite;
 }
 
 /* Darker variant for light backgrounds */
@@ -302,11 +274,11 @@
     #db2777,
     #1e40af
   );
-  background-size: 300% 300%;
+  background-size: 200% 200%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 6s ease infinite;
+  animation: gradient-shift 8s ease infinite;
 }
 
 /* 4. Floating Animation */

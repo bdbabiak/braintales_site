@@ -8,6 +8,8 @@ import { Analytics } from "@/lib/analytics";
 import { GradientHeading, AnimatedCard, AnimatedStarRating, BookCover3D } from "@/components/BookDisplay";
 import { BookMetadata } from "@/components/ReadingTime";
 import { AmazonLookInside } from "@/components/BookSampleReader";
+import { LazyVideo } from "@/components/LazyVideo";
+import { OptimizedImage, BookCoverImage } from "@/components/OptimizedImage";
 import { BookSampleReader } from "@/components/BookSampleReader";
 
 interface SeriesBook {
@@ -152,9 +154,6 @@ const seriesData: BookSeries[] = [
 ];
 
 export default function Series() {
-  // State to manage video playback (ensures only one video plays at a time)
-  const [activeVideo, setActiveVideo] = useState<string | null>(null);
-  
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -238,46 +237,12 @@ export default function Series() {
                           <Play className="w-5 h-5 inline-block mr-2" />
                           Is Meaning A Joke? - Dada, Absurdism And Deconstruction Explained
                         </h3>
-                        {activeVideo === 'absurdism' ? (
-                          <div className="relative rounded-lg overflow-hidden" style={{ paddingBottom: '177.78%' }}>
-                            <iframe
-                              className="absolute top-0 left-0 w-full h-full"
-                              src="https://www.youtube.com/embed/dQYcv1UV6Yg?autoplay=1&rel=0&modestbranding=1"
-                              title="Is Meaning A Joke? - Dada, Absurdism And Deconstruction Explained"
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            />
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => setActiveVideo('absurdism')}
-                            className="w-full group relative overflow-hidden rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
-                          >
-                            <div className="relative bg-gradient-to-br from-slate-800 to-slate-900" style={{ paddingBottom: '177.78%' }}>
-                              {/* Thumbnail Image */}
-                              <img 
-                                src="https://i.ytimg.com/vi/dQYcv1UV6Yg/hqdefault.jpg"
-                                alt="Video thumbnail"
-                                className="absolute inset-0 w-full h-full object-cover"
-                                onError={(e) => {
-                                  // If thumbnail fails to load, hide it and show fallback
-                                  e.currentTarget.style.display = 'none';
-                                }}
-                              />
-                              {/* Overlay with play button */}
-                              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                                <div className="text-center">
-                                  <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-white/90 group-hover:bg-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all">
-                                    <Play className="w-8 h-8 text-slate-900 ml-1" fill="currentColor" />
-                                  </div>
-                                  <p className="text-white font-medium drop-shadow-lg">Watch Video</p>
-                                  <p className="text-slate-200 text-sm mt-1 drop-shadow-lg">Explore the philosophy of absurdist fiction</p>
-                                </div>
-                              </div>
-                            </div>
-                          </button>
-                        )}
+                        <LazyVideo
+                          videoId="dQYcv1UV6Yg"
+                          title="Is Meaning A Joke? - Dada, Absurdism And Deconstruction Explained"
+                          description="Explore the philosophy of absurdist fiction"
+                          aspectRatio="177.78%" // 9:16 vertical video
+                        />
                       </div>
                     </div>
                   </div>
@@ -314,6 +279,7 @@ export default function Series() {
                           src={book.cover}
                           alt={book.title}
                           className="w-full h-auto rounded shadow-lg"
+                          loading="lazy"
                         />
                       </div>
                       

@@ -9,6 +9,8 @@ import { BookCover3D, AnimatedStarRating, GradientHeading, AnimatedCard } from "
 import { BookMetadata } from "@/components/ReadingTime";
 import { StickyBuyBar } from "@/components/StickyBuyBar";
 import { AmazonLookInside } from "@/components/BookSampleReader";
+import { OptimizedImage, BookCoverImage } from "@/components/OptimizedImage";
+import { LazyVideo } from "@/components/LazyVideo";
 import { BookSampleReader } from "@/components/BookSampleReader";
 
 interface Book {
@@ -436,10 +438,11 @@ export default function Home() {
           <div className="order-1 md:order-2 flex justify-center">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-3xl opacity-30"></div>
-              <img
+              <OptimizedImage
                 src="/docauthorpic.png"
                 alt="Dr. Brian Dale Babiak"
                 className="relative rounded-full w-80 h-80 object-cover border-4 border-slate-700 shadow-2xl"
+                priority={true} // Load immediately since it's above the fold
               />
             </div>
           </div>
