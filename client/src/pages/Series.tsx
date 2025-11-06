@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ExternalLink, Star } from "lucide-react";
+import { ExternalLink, Star, Play } from "lucide-react";
 import { Link } from "wouter";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Analytics } from "@/lib/analytics";
 
@@ -148,9 +148,20 @@ const seriesData: BookSeries[] = [
 ];
 
 export default function Series() {
+  // State for managing which video is playing
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
+  const videoRef = useRef<HTMLIFrameElement>(null);
+
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // Stop video when navigating away or when component unmounts
+  useEffect(() => {
+    return () => {
+      setPlayingVideo(null);
+    };
   }, []);
 
   // Fetch ratings for all books - memoize to prevent cache invalidation
@@ -221,6 +232,66 @@ export default function Series() {
                 <p className="text-lg text-slate-400 mb-6">
                   {series.description}
                 </p>
+                
+                {/* Video Player for The Absurd Quantum Chronicles */}
+                {series.id === 3 && (
+                  <div className="mb-8">
+                    <div className="max-w-2xl mx-auto">
+                      {/* Video Title */}
+                      <div className="text-center mb-4">
+                        <p className="text-md text-slate-300 font-medium">
+                          Is Meaning A Joke? - Dada, Absurdism And Deconstruction Explained
+                        </p>
+                      </div>
+                      
+                      {/* Video Container */}
+                      {!playingVideo ? (
+                        <div 
+                          onClick={() => setPlayingVideo('absurd-quantum')}
+                          className="relative group cursor-pointer rounded-lg overflow-hidden shadow-2xl bg-slate-900"
+                        >
+                          {/* Thumbnail with overlay */}
+                          <div className="aspect-video bg-gradient-to-br from-purple-900/20 to-pink-900/20 flex items-center justify-center">
+                            <img 
+                              src="https://i.ytimg.com/vi/dQYcv1UV6Yg/maxresdefault.jpg"
+                              alt="Video thumbnail"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                              }}
+                            />
+                            {/* Play Button Overlay */}
+                            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                              <div className="bg-white/90 group-hover:bg-white rounded-full p-4 shadow-lg transform group-hover:scale-110 transition-transform">
+                                <Play className="w-8 h-8 text-slate-900 ml-1" fill="currentColor" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : playingVideo === 'absurd-quantum' ? (
+                        <div className="relative rounded-lg overflow-hidden shadow-2xl">
+                          <div className="aspect-video">
+                            <iframe
+                              ref={videoRef}
+                              src="https://www.youtube.com/embed/dQYcv1UV6Yg?autoplay=1&rel=0&modestbranding=1"
+                              title="Is Meaning A Joke? - Dada, Absurdism And Deconstruction Explained"
+                              className="w-full h-full"
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            />
+                          </div>
+                        </div>
+                      ) : null}
+                      
+                      {/* Video Description */}
+                      <p className="text-center text-sm text-slate-500 mt-3 italic">
+                        A perfect companion to understanding the philosophical underpinnings of this series
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
                 <Button
                   asChild
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-12 py-7 text-xl shadow-lg"
@@ -334,4 +405,3 @@ export default function Series() {
     </div>
   );
 }
-
