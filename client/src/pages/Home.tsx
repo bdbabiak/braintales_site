@@ -8,6 +8,8 @@ import { trpc } from "@/lib/trpc";
 import { BookCover3D, AnimatedStarRating, GradientHeading, AnimatedCard } from "@/components/BookDisplay";
 import { BookMetadata } from "@/components/ReadingTime";
 import { StickyBuyBar } from "@/components/StickyBuyBar";
+import { BookSampleReader } from "@/components/BookSampleReader";
+import { BookSampleReader } from "@/components/BookSampleReader";
 
 interface Book {
   id: number;
@@ -354,20 +356,28 @@ export default function Home() {
           </div>
 
           {/* Amazon Button */}
-          <Button
-            asChild
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
-          >
-            <a
-              href={book.amazonLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2"
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <BookSampleReader 
+              bookAsin={book.asin}
+              bookTitle={book.title}
+              className="flex-1"
+            />
+            <Button
+              asChild
+              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
             >
-              Get on Amazon
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          </Button>
+              <a
+                href={book.amazonLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2"
+              >
+                Get on Amazon
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </Button>
+          </div>
         </div>
       </Card>
     );
@@ -561,7 +571,7 @@ export default function Home() {
             amazonLink: featuredBook.amazonLink,
             asin: featuredBook.asin
           }}
-          threshold={600}
+          threshold={300}
         />
       )}
     </div>

@@ -5,6 +5,8 @@ import { Link } from "wouter";
 import { useEffect, useMemo } from "react";
 import { trpc } from "@/lib/trpc";
 import { Analytics } from "@/lib/analytics";
+import { GradientHeading, AnimatedStarRating, AnimatedCard } from "@/components/BookDisplay";
+import { GradientHeading, AnimatedStarRating } from "@/components/BookDisplay";
 
 interface Audiobook {
   id: number;
@@ -161,9 +163,9 @@ export default function Audiobooks() {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-6">
             <Headphones className="w-12 h-12 text-blue-400" />
-            <h1 className="text-5xl md:text-6xl font-bold text-white">
+            <GradientHeading as="h1" className="text-5xl md:text-6xl">
               Audiobooks
-            </h1>
+            </GradientHeading>
           </div>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-8">
             Immerse yourself in Dr. Babiak's stories, narrated by professional voice actors
@@ -235,13 +237,12 @@ export default function Audiobooks() {
 
                         {/* Rating */}
                         {rating && rating.reviews > 0 && (
-                          <div className="flex items-center gap-2 mb-4">
-                            <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                              <span className="text-yellow-500 font-semibold">{rating.rating.toFixed(1)}</span>
-                            </div>
-                            <span className="text-slate-400 text-sm">({rating.reviews} reviews)</span>
-                          </div>
+                          <AnimatedStarRating 
+                            rating={rating.rating}
+                            reviews={rating.reviews}
+                            animated={true}
+                            className="mb-4"
+                          />
                         )}
 
                         {/* Blurb */}

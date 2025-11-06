@@ -2,7 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "wouter";
 import { ArrowLeft, Brain, Heart, Lightbulb, Scale, Sparkles, Users } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { GradientHeading } from "@/components/BookDisplay";
+import { BookQuiz } from "@/components/BookQuiz";
 
 interface Theme {
   icon: React.ReactNode;
@@ -51,6 +53,8 @@ const themes: Theme[] = [
 ];
 
 export default function Themes() {
+  const [showQuiz, setShowQuiz] = useState(false);
+  
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -88,9 +92,9 @@ export default function Themes() {
       <section className="container py-12 md:py-20">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+            <GradientHeading as="h1" className="text-5xl md:text-6xl mb-6">
               Themes & Ideas
-            </h1>
+            </GradientHeading>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
               From neuroscience to fiction, Dr. Babiak's work explores recurring themes that challenge conventional thinking and illuminate the human condition.
             </p>
@@ -132,6 +136,37 @@ export default function Themes() {
                 </div>
               </Card>
             ))}
+          </div>
+
+          {/* Book Quiz Section */}
+          <div className="mt-20">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Not Sure Where to Start?
+              </h2>
+              <p className="text-lg text-slate-300 mb-6">
+                Take our quick quiz to find your perfect book match
+              </p>
+              {!showQuiz ? (
+                <Button 
+                  onClick={() => setShowQuiz(true)}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-8 py-4 text-lg"
+                >
+                  Take the Book Quiz
+                </Button>
+              ) : (
+                <div className="mt-8">
+                  <BookQuiz />
+                  <Button 
+                    onClick={() => setShowQuiz(false)}
+                    variant="outline"
+                    className="mt-4 border-slate-600 hover:bg-slate-700"
+                  >
+                    Hide Quiz
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* CTA */}

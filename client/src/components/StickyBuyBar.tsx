@@ -68,13 +68,17 @@ export const StickyBuyBar: React.FC<StickyBuyBarProps> = ({
     <div 
       className={`
         fixed bottom-0 left-0 right-0 z-40
-        bg-slate-900/95 backdrop-blur-sm
-        border-t border-slate-700
-        transform transition-transform duration-300 ease-out
+        bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900
+        backdrop-blur-lg
+        border-t-2 border-blue-500/50
+        shadow-2xl shadow-blue-500/20
+        transform transition-all duration-500 ease-out
         ${isVisible ? 'translate-y-0' : 'translate-y-full'}
         ${className}
       `}
-      style={{ animation: isVisible ? 'slide-up-sticky 0.3s ease-out' : '' }}
+      style={{ 
+        animation: isVisible ? 'slide-up-sticky 0.5s ease-out, pulse-glow 3s ease-in-out infinite' : '',
+      }}
     >
       <div className="container">
         <div className="flex items-center justify-between py-3 md:py-4">

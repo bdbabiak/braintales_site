@@ -95,15 +95,22 @@ interface GradientHeadingProps {
   children: React.ReactNode;
   className?: string;
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  variant?: 'light' | 'dark';
 }
 
 export const GradientHeading: React.FC<GradientHeadingProps> = ({ 
   children, 
   className = '',
-  as: Component = 'h1'
+  as: Component = 'h1',
+  variant = 'dark'
 }) => {
+  // Use brighter colors for dark backgrounds, darker colors for light
+  const gradientClass = variant === 'dark' 
+    ? 'gradient-text-animated' // existing bright gradient for dark backgrounds
+    : 'gradient-text-animated-dark'; // new darker gradient for light backgrounds
+    
   return (
-    <Component className={`gradient-text-animated font-bold ${className}`}>
+    <Component className={`${gradientClass} font-bold ${className}`}>
       {children}
     </Component>
   );

@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { useEffect } from "react";
+import { GradientHeading } from "@/components/BookDisplay";
 
 export default function About() {
   // Scroll to top on page load
@@ -41,9 +42,9 @@ export default function About() {
       {/* About Section */}
       <section className="container py-12 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-8">
+          <GradientHeading as="h1" className="text-5xl md:text-6xl mb-8">
             About the Author
-          </h1>
+          </GradientHeading>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="md:col-span-1">

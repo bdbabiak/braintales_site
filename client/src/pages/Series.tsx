@@ -7,6 +7,8 @@ import { trpc } from "@/lib/trpc";
 import { Analytics } from "@/lib/analytics";
 import { GradientHeading, AnimatedCard, AnimatedStarRating, BookCover3D } from "@/components/BookDisplay";
 import { BookMetadata } from "@/components/ReadingTime";
+import { BookSampleReader } from "@/components/BookSampleReader";
+import { BookSampleReader } from "@/components/BookSampleReader";
 
 interface SeriesBook {
   title: string;
@@ -331,7 +333,7 @@ export default function Series() {
                       )}
                       
                       {/* Bullet Points */}
-                      <ul className="space-y-2 w-full">
+                      <ul className="space-y-2 w-full mb-4">
                         {book.bullets.map((bullet, bidx) => (
                           <li key={bidx} className="flex items-start gap-2 text-slate-300 text-sm">
                             <span className="text-blue-400 mt-1">•</span>
@@ -339,6 +341,13 @@ export default function Series() {
                           </li>
                         ))}
                       </ul>
+                      
+                      {/* Sample Reader */}
+                      <BookSampleReader 
+                        bookAsin={book.asin}
+                        bookTitle={book.title}
+                        className="w-full mt-auto"
+                      />
                     </div>
                   );
                 })}
