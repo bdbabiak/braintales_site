@@ -236,12 +236,14 @@ export default function Series() {
                           <Play className="w-5 h-5 inline-block mr-2" />
                           Is Meaning A Joke? - Dada, Absurdism And Deconstruction Explained
                         </h3>
-                        <LazyVideo
-                          videoId="dQYcv1UV6Yg"
-                          title="Is Meaning A Joke? - Dada, Absurdism And Deconstruction Explained"
-                          description="Explore the philosophy of absurdist fiction"
-                          aspectRatio="177.78%" // 9:16 vertical video
-                        />
+                        <div className="max-w-sm mx-auto"> {/* Constrain width for vertical video */}
+                          <LazyVideo
+                            videoId="dQYcv1UV6Yg"
+                            title="Is Meaning A Joke? - Dada, Absurdism And Deconstruction Explained"
+                            description="Explore the philosophy of absurdist fiction"
+                            aspectRatio="177.78%" // 9:16 vertical video
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

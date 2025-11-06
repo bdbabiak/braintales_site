@@ -438,7 +438,7 @@ export default function Home() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-3xl opacity-30"></div>
               <img
-                src="/docauthorpic-optimized.jpg"
+                src="/docauthorpic-better.jpg"
                 alt="Dr. Brian Dale Babiak"
                 className="relative rounded-full w-80 h-80 object-cover border-4 border-slate-700 shadow-2xl"
                 loading="eager"
