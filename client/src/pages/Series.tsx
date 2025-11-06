@@ -5,6 +5,8 @@ import { Link } from "wouter";
 import { useEffect, useMemo, useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Analytics } from "@/lib/analytics";
+import { GradientHeading, AnimatedCard, AnimatedStarRating, BookCover3D } from "@/components/BookDisplay";
+import { BookMetadata } from "@/components/ReadingTime";
 
 interface SeriesBook {
   title: string;
@@ -204,9 +206,9 @@ export default function Series() {
       {/* Hero Section */}
       <section className="container py-20">
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+          <GradientHeading as="h1" className="text-5xl md:text-6xl mb-6">
             Book Series
-          </h1>
+          </GradientHeading>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
             Explore interconnected stories and themes across Dr. Babiak's fiction series
           </p>
@@ -319,24 +321,13 @@ export default function Series() {
                       </h3>
                       
                       {/* Cached Reviews */}
-                        {rating && rating.reviews > 0 && (
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-4 h-4 ${
-                                  i < Math.floor(rating.rating)
-                                    ? "fill-yellow-400 text-yellow-400"
-                                    : "text-slate-600"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-sm text-slate-400">
-                            {rating.rating.toFixed(1)} ({rating.reviews.toLocaleString()})
-                          </span>
-                        </div>
+                      {rating && rating.reviews > 0 && (
+                        <AnimatedStarRating 
+                          rating={rating.rating}
+                          reviews={rating.reviews}
+                          animated={true}
+                          className="mb-4 justify-center"
+                        />
                       )}
                       
                       {/* Bullet Points */}
@@ -392,3 +383,4 @@ export default function Series() {
     </div>
   );
 }
+

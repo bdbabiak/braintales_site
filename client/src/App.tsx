@@ -3,15 +3,40 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { SocialProofTicker } from "./components/SocialProofTicker";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Themes from "./pages/Themes";
 import Series from "./pages/Series";
 import Audiobooks from "./pages/Audiobooks";
+import { useEffect } from "react";
+
+// Preload critical images for better performance
+const preloadImages = (urls: string[]) => {
+  urls.forEach(url => {
+    const img = new Image();
+    img.src = url;
+  });
+};
 
 function Router() {
   // Plausible now handles SPA pageview tracking automatically with data-spa="auto"
+
+  // Preload critical book covers on mount
+  useEffect(() => {
+    const criticalImages = [
+      '/adhdbrainkindlecover.jpg',
+      '/tradingpsychology&neurosciencecoverkindle.png',
+      '/epicurus2.0cover.jpg',
+      '/everythingthinkscover.jpg',
+      '/momentumwarscover.jpg',
+      '/sighteatercover.jpg',
+      '/grandma\'sillegaldragonracingcircuitcover.jpg',
+      '/thefamiliarsystemcover.jpg'
+    ];
+    preloadImages(criticalImages);
+  }, []);
 
   // make sure to consider if you need authentication for certain routes
   return (
@@ -35,6 +60,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <SocialProofTicker />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

@@ -5,6 +5,9 @@ import { ExternalLink, Play, Search, Star, Menu, Share2 } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { BookCover3D, AnimatedStarRating, GradientHeading, AnimatedCard } from "@/components/BookDisplay";
+import { BookMetadata } from "@/components/ReadingTime";
+import { StickyBuyBar } from "@/components/StickyBuyBar";
 
 interface Book {
   id: number;
@@ -245,16 +248,16 @@ export default function Home() {
                 {book.subtitle}
               </p>
             )}
-            {/* Rating */}
+            {/* Animated Rating */}
             {rating && (
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                  <span className="text-yellow-500 font-semibold">{rating.rating}</span>
-                </div>
-                <span className="text-slate-400 text-sm">({rating.reviews} reviews)</span>
-              </div>
+              <AnimatedStarRating 
+                rating={rating.rating}
+                reviews={rating.reviews}
+                animated={true}
+              />
             )}
+            {/* Book Metadata */}
+            <BookMetadata asin={book.asin} showAll={false} />
           </div>
 
           {/* Blurb */}
@@ -407,9 +410,9 @@ export default function Home() {
       <section className="container py-20 md:py-32">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="order-2 md:order-1 space-y-6">
-            <h2 className="text-5xl md:text-7xl font-bold text-white leading-tight">
+            <GradientHeading as="h2" className="text-5xl md:text-7xl leading-tight">
               Dr. Brian Dale Babiak
-            </h2>
+            </GradientHeading>
             <p className="text-xl md:text-2xl text-slate-300 leading-relaxed">
               Physician, Author, Explorer of the Human Mind
             </p>
@@ -548,6 +551,19 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      {/* Sticky Buy Bar for Featured Book */}
+      {featuredBook && (
+        <StickyBuyBar 
+          currentBook={{
+            title: featuredBook.title,
+            subtitle: featuredBook.subtitle,
+            amazonLink: featuredBook.amazonLink,
+            asin: featuredBook.asin
+          }}
+          threshold={600}
+        />
+      )}
     </div>
   );
 }
