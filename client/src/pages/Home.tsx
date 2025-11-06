@@ -8,7 +8,7 @@ import { trpc } from "@/lib/trpc";
 import { BookCover3D, AnimatedStarRating, GradientHeading, AnimatedCard } from "@/components/BookDisplay";
 import { BookMetadata } from "@/components/ReadingTime";
 import { StickyBuyBar } from "@/components/StickyBuyBar";
-import { BookSampleReader } from "@/components/BookSampleReader";
+import { AmazonLookInside } from "@/components/BookSampleReader";
 import { BookSampleReader } from "@/components/BookSampleReader";
 
 interface Book {
@@ -358,10 +358,11 @@ export default function Home() {
           {/* Amazon Button */}
           {/* Action Buttons */}
           <div className="flex gap-2">
-            <BookSampleReader 
-              bookAsin={book.asin}
+            <AmazonLookInside
+              amazonLink={book.amazonLink}
               bookTitle={book.title}
               className="flex-1"
+              variant="button"
             />
             <Button
               asChild

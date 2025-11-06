@@ -7,7 +7,7 @@ import { trpc } from "@/lib/trpc";
 import { Analytics } from "@/lib/analytics";
 import { GradientHeading, AnimatedCard, AnimatedStarRating, BookCover3D } from "@/components/BookDisplay";
 import { BookMetadata } from "@/components/ReadingTime";
-import { BookSampleReader } from "@/components/BookSampleReader";
+import { AmazonLookInside } from "@/components/BookSampleReader";
 import { BookSampleReader } from "@/components/BookSampleReader";
 
 interface SeriesBook {
@@ -342,11 +342,12 @@ export default function Series() {
                         ))}
                       </ul>
                       
-                      {/* Sample Reader */}
-                      <BookSampleReader 
-                        bookAsin={book.asin}
+                      {/* Look Inside Button */}
+                      <AmazonLookInside
+                        amazonLink={book.amazonLink}
                         bookTitle={book.title}
                         className="w-full mt-auto"
+                        variant="button"
                       />
                     </div>
                   );
