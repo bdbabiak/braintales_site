@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { publicProcedure, router } from '@server/trpc';
+import { publicProcedure, router } from '../_core/trpc';
 import nodemailer from 'nodemailer';
 import { promises as fs } from 'fs';
 import path from 'path';

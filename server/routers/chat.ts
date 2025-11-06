@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { publicProcedure, router } from '@server/trpc';
+import { publicProcedure, router } from '../_core/trpc';
 
 // For now, we'll use simple keyword-based responses
 // In production, you could integrate with OpenAI API, Claude API, etc.
