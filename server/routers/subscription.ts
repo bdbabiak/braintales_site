@@ -71,7 +71,8 @@ Your free chapter is attached to this email. This book is a clinician-led guide 
 If you enjoy this chapter, the full book is available on Amazon: https://www.amazon.com/dp/B0FWTY1VVS
 
 Best regards,
-Dr. Brian Dale Babiak`,
+Dr. Brian Dale Babiak
+https://braintales.net`,
     fileName: 'ADHD_Brain_Chapter_1.pdf'
   },
   'doubles': {
@@ -83,7 +84,8 @@ Your free chapter is attached. This political thriller explores what happens whe
 If you enjoy this chapter, the full book is available on Amazon: https://www.amazon.com/dp/B0FSSW9XGX
 
 Best regards,
-Dr. Brian Dale Babiak`,
+Dr. Brian Dale Babiak
+https://braintales.net`,
     fileName: 'Doubles_Chapter_1.pdf'
   },
   'epicurus': {
@@ -95,7 +97,8 @@ Your free chapter is attached. This book fuses ancient Epicurean philosophy with
 If you enjoy this chapter, the full book is available on Amazon: https://www.amazon.com/dp/B0FVF3ZRJQ
 
 Best regards,
-Dr. Brian Dale Babiak`,
+Dr. Brian Dale Babiak
+https://braintales.net`,
     fileName: 'Epicurus_Chapter_1.pdf'
   },
   'sight-eater': {
@@ -107,7 +110,8 @@ Your free chapter is attached. A blind woman sees by eating eyes; a man grows th
 If you enjoy this chapter, the full book is available on Amazon: https://www.amazon.com/dp/B0FN3M4DFZ
 
 Best regards,
-Dr. Brian Dale Babiak`,
+Dr. Brian Dale Babiak
+https://braintales.net`,
     fileName: 'Sight_Eater_Chapter_1.pdf'
   },
   'grandma': {
@@ -119,7 +123,8 @@ Your free chapter is attached. This absurdist sci-fi satire where no one is expe
 If you enjoy this chapter, the full book is available on Amazon: https://www.amazon.com/dp/B0FP9MRCJM
 
 Best regards,
-Dr. Brian Dale Babiak`,
+Dr. Brian Dale Babiak
+https://braintales.net`,
     fileName: 'Grandma_Chapter_1.pdf'
   },
 };
@@ -194,8 +199,9 @@ export const subscriptionRouter = router({
               
               <p style="color: #666; font-size: 14px; font-style: italic;">
                 Best regards,<br>
-                Dr. Brian Dale Babiak<br>
-                <a href="https://braintales.net" style="color: #1e40af;">braintales.net</a>
+                <strong>Dr. Brian Dale Babiak</strong><br>
+                <a href="https://braintales.net" style="color: #1e40af; text-decoration: none;">https://braintales.net</a><br>
+                <em>Explore more books and resources at our website</em>
               </p>
               
               <p style="color: #999; font-size: 12px; margin-top: 30px;">

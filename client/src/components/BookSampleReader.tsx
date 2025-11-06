@@ -44,9 +44,6 @@ const AMAZON_EMBED_URLS: Record<string, string> = {
   // The Momentum Wars
   'B0FMPYTC8H': 'https://read.amazon.com/kp/embed?asin=B0FMPYTC8H&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp',
   
-  // Chronophage
-  'B0FNM5TB9Y': 'https://read.amazon.com/kp/embed?asin=B0FNM5TB9Y&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp',
-  
   // Quantum Sock Mismatch Mayhem
   'B0FR32348P': 'https://read.amazon.com/kp/embed?asin=B0FR32348P&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp',
   
