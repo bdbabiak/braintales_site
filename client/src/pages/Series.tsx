@@ -251,13 +251,24 @@ export default function Series() {
                             className="w-full group relative overflow-hidden rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
                           >
                             <div className="relative bg-gradient-to-br from-slate-800 to-slate-900" style={{ paddingBottom: '177.78%' }}>
-                              <div className="absolute inset-0 flex items-center justify-center">
+                              {/* Thumbnail Image */}
+                              <img 
+                                src="https://i.ytimg.com/vi/dQYcv1UV6Yg/hqdefault.jpg"
+                                alt="Video thumbnail"
+                                className="absolute inset-0 w-full h-full object-cover"
+                                onError={(e) => {
+                                  // If thumbnail fails to load, hide it and show fallback
+                                  e.currentTarget.style.display = 'none';
+                                }}
+                              />
+                              {/* Overlay with play button */}
+                              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
                                 <div className="text-center">
-                                  <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                                    <Play className="w-8 h-8 text-white ml-1" />
+                                  <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-white/90 group-hover:bg-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all">
+                                    <Play className="w-8 h-8 text-slate-900 ml-1" fill="currentColor" />
                                   </div>
-                                  <p className="text-white font-medium">Watch Video</p>
-                                  <p className="text-slate-400 text-sm mt-1">Explore the philosophy of absurdist fiction</p>
+                                  <p className="text-white font-medium drop-shadow-lg">Watch Video</p>
+                                  <p className="text-slate-200 text-sm mt-1 drop-shadow-lg">Explore the philosophy of absurdist fiction</p>
                                 </div>
                               </div>
                             </div>
