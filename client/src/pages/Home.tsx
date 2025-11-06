@@ -361,6 +361,7 @@ export default function Home() {
             <AmazonLookInside
               amazonLink={book.amazonLink}
               bookTitle={book.title}
+              asin={book.asin}
               className="flex-1"
               variant="button"
             />

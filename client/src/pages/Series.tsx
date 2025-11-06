@@ -346,6 +346,7 @@ export default function Series() {
                       <AmazonLookInside
                         amazonLink={book.amazonLink}
                         bookTitle={book.title}
+                        asin={book.asin}
                         className="w-full mt-auto"
                         variant="button"
                       />
