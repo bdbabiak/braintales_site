@@ -3,6 +3,8 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { booksRouter } from "./routers/books";
+import { subscriptionRouter } from "./routers/subscription";
+import { chatRouter } from "./routers/chat";
 
 export const appRouter = router({
   system: systemRouter,
@@ -19,6 +21,8 @@ export const appRouter = router({
   }),
 
   books: booksRouter,
+  subscription: subscriptionRouter,
+  chat: chatRouter,
 
   // TODO: add feature routers here, e.g.
   // todo: router({

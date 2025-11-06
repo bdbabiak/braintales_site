@@ -4,6 +4,8 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { EmailCapture } from "./components/EmailCapture";
+import { AIChatbot } from "./components/AIChatbot";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Themes from "./pages/Themes";
@@ -35,6 +37,8 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <EmailCapture />
+          <AIChatbot />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
