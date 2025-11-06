@@ -9,7 +9,6 @@ import { GradientHeading, AnimatedCard, AnimatedStarRating, BookCover3D } from "
 import { BookMetadata } from "@/components/ReadingTime";
 import { AmazonLookInside } from "@/components/BookSampleReader";
 import { LazyVideo } from "@/components/LazyVideo";
-import { OptimizedImage, BookCoverImage } from "@/components/OptimizedImage";
 import { BookSampleReader } from "@/components/BookSampleReader";
 
 interface SeriesBook {

@@ -20,10 +20,23 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
+  const [imageError, setImageError] = useState(false);
   const imgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (priority || !imgRef.current) return;
+    // Priority images should load immediately
+    if (priority) {
+      setIsInView(true);
+      // Preload priority images
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        // Image is cached now
+      };
+      return;
+    }
+
+    if (!imgRef.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -38,7 +51,21 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     observer.observe(imgRef.current);
 
     return () => observer.disconnect();
-  }, [priority]);
+  }, [priority, src]);
+
+  // Fallback for image loading errors
+  if (imageError) {
+    return (
+      <div 
+        className={cn('relative overflow-hidden bg-slate-800', className)}
+        style={aspectRatio ? { paddingBottom: aspectRatio } : undefined}
+      >
+        <div className="absolute inset-0 flex items-center justify-center text-slate-500">
+          Image loading failed
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -47,12 +74,11 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       style={aspectRatio ? { paddingBottom: aspectRatio } : undefined}
     >
       {/* Placeholder with blur effect */}
-      <div 
-        className={cn(
-          'absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-700 animate-pulse transition-opacity duration-500',
-          isLoaded ? 'opacity-0' : 'opacity-100'
-        )}
-      />
+      {!isLoaded && (
+        <div 
+          className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-700 animate-pulse"
+        />
+      )}
       
       {/* Actual image */}
       {isInView && (
@@ -60,14 +86,18 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
           src={src}
           alt={alt}
           className={cn(
-            'w-full h-full object-cover transition-opacity duration-500',
+            'w-full h-full object-cover transition-opacity duration-300',
             isLoaded ? 'opacity-100' : 'opacity-0',
             aspectRatio ? 'absolute inset-0' : ''
           )}
           loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
           onLoad={() => {
             setIsLoaded(true);
             onLoad?.();
+          }}
+          onError={() => {
+            setImageError(true);
           }}
         />
       )}
