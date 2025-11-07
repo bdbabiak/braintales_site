@@ -10,7 +10,12 @@ let _db: ReturnType<typeof drizzle> | null = null;
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      const pool = createPool(process.env.DATABASE_URL);
+      const pool = createPool({
+        uri: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: true
+        }
+      });
       _db = drizzle(pool as any);
       console.log("[Database] Connected successfully");
     } catch (error) {
