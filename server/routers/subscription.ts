@@ -19,22 +19,20 @@ const subscribeSchema = z.object({
 });
 
 // Email transporter setup - SIMPLE VERSION
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'mail.privateemail.com',
-  port: Number(process.env.EMAIL_PORT || 465),
-  secure: true,
-  auth: { user: emailUser, pass: emailPass },
-  tls: { rejectUnauthorized: false, minVersion: 'TLSv1.2' },
-  logger: true,
-  debug: true,
-});
-
+const createTransporter = () => {
+  const emailUser = process.env.EMAIL_USER || 'readerlist@braintales.net';
+  const emailPass = process.env.EMAIL_PASS;
+  
+  if (!emailPass) {
+    console.error('❌ EMAIL_PASS environment variable not set!');
+    throw new Error('Email configuration missing');
+  }
   
   console.log('📧 Creating email transporter for:', emailUser);
   console.log('📧 Email password length:', emailPass.length, 'characters');
   
   // Using Namecheap Private Email SMTP settings with port 465
-  const transporter = nodemailer.createTransporter({
+  const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'mail.privateemail.com',
     port: Number(process.env.EMAIL_PORT || 465),
     secure: true, // true for 465
@@ -215,7 +213,6 @@ export const subscriptionRouter = router({
         console.error('Error code:', error.code);
         console.error('Error message:', error.message);
         
-        // Log specific error types for debugging
         if (error.code === 'EAUTH') {
           console.error('🔐 Authentication failed - check EMAIL_PASS in environment variables');
         } else if (error.code === 'ECONNECTION' || error.code === 'ECONNREFUSED') {
@@ -224,7 +221,6 @@ export const subscriptionRouter = router({
           console.error('⏱️ Connection timeout - SMTP server may be blocking the port');
         }
         
-        // Don't throw the full error to client for security
         throw new Error('Failed to process subscription. Please try again.');
       }
     }),
@@ -234,12 +230,9 @@ export const subscriptionRouter = router({
     .mutation(async () => {
       try {
         const transporter = createTransporter();
-        
-        // Verify connection configuration
         await transporter.verify();
         console.log('✅ SMTP connection verified');
         
-        // Send test email
         const info = await transporter.sendMail({
           from: process.env.EMAIL_USER || 'readerlist@braintales.net',
           to: process.env.EMAIL_USER || 'readerlist@braintales.net',
@@ -266,16 +259,3 @@ export const subscriptionRouter = router({
       }
     }),
 });
-```
-
-### **KEY CHANGES:**
-1. ✅ Using simple `import nodemailer from 'nodemailer'` (not `import * as`)
-2. ✅ Changed to port 465 with `secure: true` for Namecheap
-3. ✅ Removed async/await from createTransporter (not needed)
-4. ✅ Added `transporter.verify()` before sending
-5. ✅ Your actual book descriptions
-
-### **DEPLOY THIS + Set Environment Variables:**
-```
-EMAIL_USER=readerlist@braintales.net
-EMAIL_PASS=Shiyth;!912
