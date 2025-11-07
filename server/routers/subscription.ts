@@ -210,8 +210,7 @@ export const subscriptionRouter = router({
         const htmlBody = `
           <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5;font-size:16px">
             <p>Thank you for your interest!</p>
-            <p>${chapterInfo.text.replace(/
-/g, '<br/>')}</p>
+            <p>${bodyHtml}</p>
             <p>If the attachment is blocked, you can download your chapter securely here:</p>
             <p><a href="https://braintales.net/chapters/${chapterInfo.fileName}" target="_blank" rel="noopener">Direct download</a></p>
             <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0"/>
@@ -271,8 +270,7 @@ export const subscriptionRouter = router({
         const htmlBody = `
           <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5;font-size:16px">
             <p>Thank you for your interest!</p>
-            <p>${chapterInfo.text.replace(/
-/g, '<br/>')}</p>
+            <p>${bodyHtml}</p>
             <p>If the attachment is blocked, you can download your chapter securely here:</p>
             <p><a href="https://braintales.net/chapters/${chapterInfo.fileName}" target="_blank" rel="noopener">Direct download</a></p>
             <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0"/>
