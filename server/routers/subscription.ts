@@ -36,6 +36,7 @@ const createTransporter = () => {
     host: process.env.EMAIL_HOST || 'mail.privateemail.com',
     port: Number(process.env.EMAIL_PORT || 465),
     secure: true, // true for 465
+    authMethod: 'LOGIN', 
     auth: {
       user: emailUser,
       pass: emailPass
