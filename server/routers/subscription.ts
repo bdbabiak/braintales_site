@@ -25,10 +25,12 @@ const createTransporter = () => {
   
   if (!emailPass) {
     console.error('❌ EMAIL_PASS environment variable not set!');
+    console.error('Please set EMAIL_PASS in Render environment variables');
     throw new Error('Email configuration missing');
   }
   
   console.log('📧 Creating email transporter for:', emailUser);
+  console.log('📧 Email password length:', emailPass.length, 'characters');
   
   // Using Namecheap Private Email SMTP settings
   const transporter = nodemailer.createTransporter({
@@ -40,8 +42,11 @@ const createTransporter = () => {
       pass: emailPass
     },
     tls: {
-      rejectUnauthorized: false // Sometimes needed for Namecheap
-    }
+      rejectUnauthorized: false, // Sometimes needed for Namecheap
+      minVersion: 'TLSv1.2'
+    },
+    debug: true, // Enable debug output
+    logger: true // Log to console
   });
   
   return transporter;
@@ -120,7 +125,12 @@ export const subscriptionRouter = router({
   subscribe: publicProcedure
     .input(subscribeSchema)
     .mutation(async ({ input }) => {
-      const db = getDb();
+      const db = await getDb();
+      
+      if (!db) {
+        console.error('❌ Database connection failed');
+        throw new Error('Database connection failed');
+      }
       
       try {
         // Check if already subscribed
@@ -230,6 +240,19 @@ export const subscriptionRouter = router({
         
         // Actually send the email
         console.log('Attempting to send email to:', input.email);
+        console.log('Using SMTP:', 'mail.privateemail.com:587');
+        
+        try {
+          // Verify connection first
+          await transporter.verify();
+          console.log('✅ SMTP connection verified successfully');
+        } catch (verifyError: any) {
+          console.error('❌ SMTP verification failed:', verifyError.message);
+          console.error('   Error code:', verifyError.code);
+          console.error('   Response:', verifyError.response);
+          throw verifyError;
+        }
+        
         const emailResult = await transporter.sendMail(mailOptions);
         
         console.log('✅ Email sent successfully!');
