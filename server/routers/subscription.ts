@@ -19,14 +19,16 @@ const subscribeSchema = z.object({
 });
 
 // Email transporter setup - SIMPLE VERSION
-const createTransporter = () => {
-  const emailUser = process.env.EMAIL_USER || 'readerlist@braintales.net';
-  const emailPass = process.env.EMAIL_PASS;
-  
-  if (!emailPass) {
-    console.error('❌ EMAIL_PASS environment variable not set!');
-    throw new Error('Email configuration missing');
-  }
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST || 'mail.privateemail.com',
+  port: Number(process.env.EMAIL_PORT || 465),
+  secure: true,
+  auth: { user: emailUser, pass: emailPass },
+  tls: { rejectUnauthorized: false, minVersion: 'TLSv1.2' },
+  logger: true,
+  debug: true,
+});
+
   
   console.log('📧 Creating email transporter for:', emailUser);
   console.log('📧 Email password length:', emailPass.length, 'characters');
