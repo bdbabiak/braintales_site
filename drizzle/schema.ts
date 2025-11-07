@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, boolean } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -60,3 +60,33 @@ export const settings = mysqlTable("settings", {
 
 export type Setting = typeof settings.$inferSelect;
 export type InsertSetting = typeof settings.$inferInsert;
+
+/**
+ * Email subscribers table for reader list management.
+ * Stores subscriber info, what they downloaded, and email campaign tracking.
+ */
+export const subscribers = mysqlTable("subscribers", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Subscriber email address */
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  /** Chapter they initially requested (adhd, doubles, epicurus, sight-eater, grandma) */
+  initialChapter: varchar("initialChapter", { length: 50 }),
+  /** Source of subscription */
+  source: varchar("source", { length: 100 }).default("chapter_download"),
+  /** Whether they've unsubscribed */
+  isActive: int("isActive").default(1).notNull(),
+  /** When they subscribed */
+  subscribedAt: timestamp("subscribedAt").defaultNow().notNull(),
+  /** When initial chapter was sent */
+  chapterSentAt: timestamp("chapterSentAt"),
+  /** When follow-up email was sent */
+  followUpSentAt: timestamp("followUpSentAt"),
+  /** Last email campaign they received */
+  lastCampaignAt: timestamp("lastCampaignAt"),
+  /** Any notes about this subscriber */
+  notes: text("notes"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Subscriber = typeof subscribers.$inferSelect;
+export type InsertSubscriber = typeof subscribers.$inferInsert;

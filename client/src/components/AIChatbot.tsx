@@ -146,7 +146,7 @@ export function AIChatbot() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-6 z-40 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-200 group"
+        className="fixed bottom-20 md:bottom-6 left-6 z-30 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-200 group"
         aria-label="Ask Dr. Babiak AI"
       >
         <div className="relative">
@@ -158,7 +158,7 @@ export function AIChatbot() {
   }
 
   return (
-    <Card className="fixed bottom-6 left-6 z-40 w-96 h-[600px] bg-slate-900 border-slate-700 shadow-2xl flex flex-col">
+    <Card className="fixed bottom-20 md:bottom-6 left-6 z-30 w-[calc(100vw-3rem)] md:w-96 h-[calc(100vh-10rem)] md:h-[600px] bg-slate-900 border-slate-700 shadow-2xl flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-700 bg-gradient-to-r from-purple-600/20 to-pink-600/20">
         <div className="flex items-center gap-3">

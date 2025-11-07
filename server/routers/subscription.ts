@@ -4,6 +4,9 @@ import nodemailer from 'nodemailer';
 import { promises as fs } from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import { getDb } from '../db';
+import { subscribers } from '../../drizzle/schema';
+import { eq } from 'drizzle-orm';
 
 // Load environment variables
 dotenv.config();
@@ -15,49 +18,33 @@ const subscribeSchema = z.object({
   source: z.string().optional(),
 });
 
-// Store subscriptions in a simple JSON file for now
-// In production, you'd use a proper database
-const SUBSCRIBERS_FILE = path.join(process.cwd(), 'subscribers.json');
-
-async function getSubscribers() {
-  try {
-    const data = await fs.readFile(SUBSCRIBERS_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-async function addSubscriber(subscriber: any) {
-  const subscribers = await getSubscribers();
-  
-  // Check if already subscribed
-  if (subscribers.find((s: any) => s.email === subscriber.email)) {
-    return { exists: true };
-  }
-  
-  subscribers.push({
-    ...subscriber,
-    subscribedAt: new Date().toISOString(),
-  });
-  
-  await fs.writeFile(SUBSCRIBERS_FILE, JSON.stringify(subscribers, null, 2));
-  return { exists: false };
-}
-
 // Configure email transporter
-// For production, use environment variables for credentials
 const createTransporter = () => {
+  const emailUser = process.env.EMAIL_USER || 'readerlist@braintales.net';
+  const emailPass = process.env.EMAIL_PASS || '';
+  
+  if (!emailPass) {
+    console.error('❌ EMAIL_PASS environment variable not set!');
+    throw new Error('Email configuration missing');
+  }
+  
+  console.log('📧 Creating email transporter for:', emailUser);
+  
   // Using Namecheap Private Email SMTP settings
-  return nodemailer.createTransporter({
+  const transporter = nodemailer.createTransporter({
     host: 'mail.privateemail.com',
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: process.env.EMAIL_USER || 'readerlist@braintales.net',
-      pass: process.env.EMAIL_PASS || '', // You'll need to set this
+      user: emailUser,
+      pass: emailPass
     },
+    tls: {
+      rejectUnauthorized: false // Sometimes needed for Namecheap
+    }
   });
+  
+  return transporter;
 };
 
 // Chapter content mapping - using REAL book descriptions from the website
@@ -133,12 +120,40 @@ export const subscriptionRouter = router({
   subscribe: publicProcedure
     .input(subscribeSchema)
     .mutation(async ({ input }) => {
+      const db = getDb();
+      
       try {
-        // Add to subscriber list
-        const result = await addSubscriber(input);
+        // Check if already subscribed
+        const existing = await db
+          .select()
+          .from(subscribers)
+          .where(eq(subscribers.email, input.email))
+          .limit(1);
         
-        if (result.exists) {
+        if (existing.length > 0) {
           console.log('Subscriber already exists:', input.email);
+          // Update their record if they want a different chapter
+          if (existing[0].initialChapter !== input.chapter) {
+            await db
+              .update(subscribers)
+              .set({ 
+                initialChapter: input.chapter,
+                updatedAt: new Date()
+              })
+              .where(eq(subscribers.email, input.email));
+          }
+        } else {
+          // Add new subscriber to database
+          await db.insert(subscribers).values({
+            email: input.email,
+            initialChapter: input.chapter,
+            source: input.source || 'chapter_download',
+            isActive: 1,
+            subscribedAt: new Date(),
+            chapterSentAt: new Date()
+          });
+          
+          console.log('✅ New subscriber added to database:', input.email);
         }
         
         // Send email with chapter
@@ -214,22 +229,44 @@ export const subscriptionRouter = router({
         };
         
         // Actually send the email
-        await transporter.sendMail(mailOptions);
+        console.log('Attempting to send email to:', input.email);
+        const emailResult = await transporter.sendMail(mailOptions);
         
-        console.log('Email sent to:', input.email);
-        console.log('Chapter sent:', input.chapter);
+        console.log('✅ Email sent successfully!');
+        console.log('   To:', input.email);
+        console.log('   Chapter:', input.chapter);
+        console.log('   Message ID:', emailResult.messageId);
+        console.log('   Response:', emailResult.response);
         
         return { 
           success: true, 
           message: 'Successfully subscribed! Check your email for your free chapter.' 
         };
-      } catch (error) {
-        console.error('Subscription error:', error);
+      } catch (error: any) {
+        console.error('❌ SUBSCRIPTION ERROR:', {
+          message: error.message,
+          code: error.code,
+          command: error.command,
+          response: error.response,
+          responseCode: error.responseCode,
+          stack: error.stack
+        });
+        
+        // Specific error messages
+        if (error.code === 'EAUTH') {
+          console.error('🔐 Authentication failed - check EMAIL_PASS in environment variables');
+        } else if (error.code === 'ECONNREFUSED') {
+          console.error('🔌 Connection refused - check SMTP settings');
+        } else if (error.code === 'ETIMEDOUT') {
+          console.error('⏱️ Connection timeout - possible firewall issue');
+        } else if (error.message?.includes('EMAIL_PASS')) {
+          console.error('🔑 EMAIL_PASS environment variable not configured');
+        }
         
         // Still save the subscription even if email fails
         return { 
           success: true, 
-          message: 'Subscription saved. If you don\'t receive your chapter, please contact us.' 
+          message: 'Subscription saved! We\'ll send your chapter shortly. If you don\'t receive it within 10 minutes, please contact readerlist@braintales.net' 
         };
       }
     }),
@@ -238,9 +275,121 @@ export const subscriptionRouter = router({
   unsubscribe: publicProcedure
     .input(z.object({ email: z.string().email() }))
     .mutation(async ({ input }) => {
-      const subscribers = await getSubscribers();
-      const filtered = subscribers.filter((s: any) => s.email !== input.email);
-      await fs.writeFile(SUBSCRIBERS_FILE, JSON.stringify(filtered, null, 2));
+      const db = getDb();
+      await db
+        .update(subscribers)
+        .set({ isActive: 0, updatedAt: new Date() })
+        .where(eq(subscribers.email, input.email));
       return { success: true };
+    }),
+    
+  // Get all subscribers for admin use
+  getSubscribers: publicProcedure
+    .query(async () => {
+      const db = getDb();
+      const subs = await db
+        .select()
+        .from(subscribers)
+        .where(eq(subscribers.isActive, 1));
+      return subs;
+    }),
+    
+  // Send follow-up email to subscribers who haven't received one
+  sendFollowUps: publicProcedure
+    .mutation(async () => {
+      const db = getDb();
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      
+      // Get subscribers who need follow-up
+      const needFollowUp = await db
+        .select()
+        .from(subscribers)
+        .where(eq(subscribers.isActive, 1));
+      
+      const toFollowUp = needFollowUp.filter(sub => {
+        if (!sub.chapterSentAt || sub.followUpSentAt) return false;
+        const sentDate = new Date(sub.chapterSentAt);
+        return sentDate < oneWeekAgo;
+      });
+      
+      const transporter = createTransporter();
+      let sent = 0;
+      
+      for (const sub of toFollowUp) {
+        try {
+          const chapterInfo = chapterContent[sub.initialChapter as keyof typeof chapterContent];
+          
+          await transporter.sendMail({
+            from: '"Dr. Brian Dale Babiak" <readerlist@braintales.net>',
+            to: sub.email,
+            subject: `Ready for the full book? ${chapterInfo.subject.replace('Your Free Chapter: ', '')}`,
+            html: `
+              <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #1e40af;">How was the chapter?</h2>
+                <p>Hi there,</p>
+                <p>A week ago, you downloaded a free chapter from <strong>${chapterInfo.subject.replace('Your Free Chapter: ', '')}</strong>.</p>
+                <p>If you enjoyed it, the full book is waiting for you on Amazon!</p>
+                <p><a href="https://braintales.net" style="color: #1e40af;">Visit our website</a> to explore all my books.</p>
+                <hr style="border: 1px solid #e5e5e5; margin: 30px 0;">
+                <p style="color: #666;">
+                  Best regards,<br>
+                  <strong>Dr. Brian Dale Babiak</strong><br>
+                  <a href="https://braintales.net">https://braintales.net</a>
+                </p>
+              </div>
+            `
+          });
+          
+          // Update database
+          await db
+            .update(subscribers)
+            .set({ followUpSentAt: new Date() })
+            .where(eq(subscribers.id, sub.id));
+            
+          sent++;
+        } catch (error) {
+          console.error('Failed to send follow-up to:', sub.email, error);
+        }
+      }
+      
+      return { success: true, sent };
+    }),
+    
+  // Test email configuration
+  testEmail: publicProcedure
+    .mutation(async () => {
+      try {
+        const transporter = createTransporter();
+        
+        // Verify connection configuration
+        await transporter.verify();
+        console.log('✅ Email server connection verified');
+        
+        // Send test email
+        const info = await transporter.sendMail({
+          from: '"Dr. Brian Dale Babiak" <readerlist@braintales.net>',
+          to: 'readerlist@braintales.net',
+          subject: 'Test Email - Braintales Website',
+          text: 'This is a test email. If you receive this, email configuration is working!',
+          html: '<p>This is a test email. If you receive this, email configuration is working!</p>'
+        });
+        
+        console.log('Message sent:', info.messageId);
+        console.log('Response:', info.response);
+        
+        return { 
+          success: true, 
+          message: 'Test email sent successfully',
+          messageId: info.messageId 
+        };
+      } catch (error: any) {
+        console.error('Test email error:', error);
+        return { 
+          success: false, 
+          message: error.message,
+          code: error.code 
+        };
+      }
     }),
 });
