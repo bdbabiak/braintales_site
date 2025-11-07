@@ -46,7 +46,7 @@ const buildTransport = (opts: { host: string; port: number; user: string; pass: 
 
 const createTransporter = async () => {
   const host = process.env.EMAIL_HOST || 'mail.privateemail.com';
-  const user = process.env.EMAIL_USER || 'readerlist@braintales.net';
+  const user = process.env.EMAIL_USER || 'readerlist@braintales.net'; // keep this aligned with SMTP auth user/domain for DMARC
   const pass = process.env.EMAIL_PASS;
   if (!pass) {
     console.error('❌ EMAIL_PASS environment variable not set!');
@@ -204,7 +204,19 @@ export const subscriptionRouter = router({
         }
 
         const fromAddress =
-          process.env.EMAIL_USER || 'readerlist@braintales.net'; // must match AUTH user
+          process.env.EMAIL_USER || 'readerlist@braintales.net'; // keep this aligned with SMTP auth user/domain for DMARC // must match AUTH user
+
+        
+        const htmlBody = `
+          <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5;font-size:16px">
+            <p>Thank you for your interest!</p>
+            <p>${chapterInfo.text.replace(/
+/g, '<br/>')}</p>
+            <p>If the attachment is blocked, you can download your chapter securely here:</p>
+            <p><a href="https://braintales.net/chapters/${chapterInfo.fileName}" target="_blank" rel="noopener">Direct download</a></p>
+            <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0"/>
+            <p style="font-size:12px;color:#6b7280">You received this email because you requested a sample chapter on braintales.net. Unsubscribe anytime.</p>
+          </div>`;
 
         const info = await transporter.sendMail({
           from: fromAddress,
@@ -212,6 +224,16 @@ export const subscriptionRouter = router({
           subject: chapterInfo.subject,
           text: chapterInfo.text,
           attachments,
+          html: htmlBody,
+          headers: {
+            'List-Unsubscribe': '<mailto:unsubscribe@braintales.net>, <https://braintales.net/unsubscribe?email=' + encodeURIComponent(input.email) + '>',
+            'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+            'X-Entity-Ref-ID': 'sample_chapter'
+          },
+          envelope: {
+            from: fromAddress,
+            to: input.email
+          }
         });
 
         console.log('✅ Email sent:', info.messageId);
@@ -243,9 +265,21 @@ export const subscriptionRouter = router({
       console.log('✅ SMTP connection verified');
 
       const fromAddress =
-        process.env.EMAIL_USER || 'readerlist@braintales.net'; // match AUTH user
+        process.env.EMAIL_USER || 'readerlist@braintales.net'; // keep this aligned with SMTP auth user/domain for DMARC // match AUTH user
 
-      const info = await transporter.sendMail({
+      
+        const htmlBody = `
+          <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5;font-size:16px">
+            <p>Thank you for your interest!</p>
+            <p>${chapterInfo.text.replace(/
+/g, '<br/>')}</p>
+            <p>If the attachment is blocked, you can download your chapter securely here:</p>
+            <p><a href="https://braintales.net/chapters/${chapterInfo.fileName}" target="_blank" rel="noopener">Direct download</a></p>
+            <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0"/>
+            <p style="font-size:12px;color:#6b7280">You received this email because you requested a sample chapter on braintales.net. Unsubscribe anytime.</p>
+          </div>`;
+
+        const info = await transporter.sendMail({
         from: fromAddress,
         to: fromAddress,
         subject: 'Test Email - BrainTales Subscription System',
