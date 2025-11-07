@@ -83,8 +83,8 @@ export function EmailCapture() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <Card className="relative w-full max-w-2xl bg-slate-900 border-slate-700 p-8 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm overflow-y-auto">
+      <Card className="relative w-full max-w-md sm:max-w-lg md:max-w-2xl bg-slate-900 border-slate-700 p-6 sm:p-8 shadow-2xl rounded-2xl max-h-[calc(100svh-2rem)] sm:max-h-[calc(100svh-4rem)] overflow-y-auto">
         <button
           onClick={() => setIsOpen(false)}
           className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
