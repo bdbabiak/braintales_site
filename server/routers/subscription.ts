@@ -35,7 +35,8 @@ const createTransporter = () => {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'mail.privateemail.com',
     port: Number(process.env.EMAIL_PORT || 465),
-    secure: true, // true for 465
+    secure: false,            // STARTTLS
+    requireTLS: true,
     authMethod: 'LOGIN', 
     auth: {
       user: emailUser,
