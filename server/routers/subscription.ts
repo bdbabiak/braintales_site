@@ -70,8 +70,31 @@ const createTransporter = async () => {
 };
 
 // ───────────────────────────────────────────────────────────
-// Content for chapter emails (unchanged from your original)
+// Content for chapter emails (NOW WITH HTML!)
 // ───────────────────────────────────────────────────────────
+
+// Helper function to create a simple HTML email template
+const createHtmlEmail = (title: string, textContent: string) => {
+  // Convert plain text links to HTML links
+  const linkedHtmlContent = textContent
+    .replace(/\n/g, '<br />')
+    .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #3b82f6; text-decoration: underline;">$1</a>');
+
+  return `
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+  <h2 style="color: #111; border-bottom: 2px solid #eee; padding-bottom: 10px;">${title}</h2>
+  <p style="color: #555;">
+    ${linkedHtmlContent}
+  </p>
+  <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+  <p style="font-size: 0.9em; color: #888;">
+    You received this email because you requested a free chapter from <a href="https://braintales.net" target="_blank" style="color: #3b82f6;">braintales.net</a>.<br />
+    To unsubscribe from future mailings, please click here: <a href="https://braintales.net/unsubscribe?email={{EMAIL_RECIPIENT_ADDRESS}}" target="_blank" style="color: #3b82f6;">Unsubscribe</a>
+  </p>
+</div>
+`;
+};
+
 const chapterContent = {
   adhd: {
     subject: 'Your Free Chapter: The ADHD Brain',
@@ -203,16 +226,34 @@ export const subscriptionRouter = router({
           console.error('Please ensure the chapters folder exists with PDFs');
         }
 
-        const fromAddress =
-          process.env.EMAIL_USER || 'readerlist@braintales.net'; // must match AUTH user
+        // --- GMAIL FIXES START HERE ---
+
+        // 1. Use a "friendly name" for the sender
+        const fromAddress = `"Dr. Brian Babiak" <${process.env.EMAIL_USER || 'readerlist@braintales.net'}>`;
+        
+        // 2. Create an HTML version of the email
+        const htmlBody = createHtmlEmail(chapterInfo.subject, chapterInfo.text)
+                         .replace('{{EMAIL_RECIPIENT_ADDRESS}}', encodeURIComponent(input.email));
+
+        // 3. Add List-Unsubscribe header (CRITICAL for deliverability)
+        const unsubscribeUrl = `https://braintales.net/unsubscribe?email=${encodeURIComponent(input.email)}`;
+
 
         const info = await transporter.sendMail({
           from: fromAddress,
           to: input.email,
           subject: chapterInfo.subject,
-          text: chapterInfo.text,
+          text: chapterInfo.text, // Plain text fallback
+          html: htmlBody,         // HTML version
           attachments,
+          headers: {
+            // This header is a major requirement for bulk senders and Gmail
+            'List-Unsubscribe': `<${unsubscribeUrl}>`,
+            'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click'
+          }
         });
+        
+        // --- GMAIL FIXES END HERE ---
 
         console.log('✅ Email sent:', info.messageId);
 
@@ -242,12 +283,11 @@ export const subscriptionRouter = router({
       const transporter = await createTransporter();
       console.log('✅ SMTP connection verified');
 
-      const fromAddress =
-        process.env.EMAIL_USER || 'readerlist@braintales.net'; // match AUTH user
+      const fromAddress = `"Braintales Test" <${process.env.EMAIL_USER || 'readerlist@braintales.net'}>`;
 
       const info = await transporter.sendMail({
         from: fromAddress,
-        to: fromAddress,
+        to: fromAddress, // Send to self for testing
         subject: 'Test Email - BrainTales Subscription System',
         text: 'If you receive this, your email configuration is working correctly!',
         html: '<p>If you receive this, your <strong>email configuration</strong> is working correctly!</p>',
