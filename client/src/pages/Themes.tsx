@@ -89,7 +89,7 @@ export default function Themes() {
       </nav>
 
       {/* Themes Section */}
-      <section className="container py-12 md:py-20">
+      <section className="container pt-12 md:pt-20 pb-40">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <GradientHeading as="h1" className="text-5xl md:text-6xl mb-6">
@@ -199,4 +199,3 @@ export default function Themes() {
     </div>
   );
 }
-
