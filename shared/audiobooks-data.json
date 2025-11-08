@@ -1,0 +1,58 @@
+{
+  "current": [
+    {
+      "title": "The Momentum Wars",
+      "asin": "B0FTPCY3YV",
+      "theme": "The necessity of chaos and disorder",
+      "image": "/audiobook-momentum-wars.png",
+      "audibleUrl": "https://www.amazon.com/Audible-The-Momentum-Wars/dp/B0FTPCY3YV"
+    },
+    {
+      "title": "Everything Thinks",
+      "asin": "B0FV12PD5D",
+      "theme": "Panpsychism",
+      "image": "/audiobook-everything-thinks.png",
+      "audibleUrl": "https://www.amazon.com/Audible-Everything-Thinks/dp/B0FV12PD5D"
+    },
+    {
+      "title": "The Sight Eater",
+      "asin": "B0FTPZF51N",
+      "theme": "Love versus need and government control of love",
+      "image": "/audiobook-sight-eater.png",
+      "audibleUrl": "https://www.amazon.com/Audible-The-Sight-Eater/dp/B0FTPZF51N"
+    },
+    {
+      "title": "The Familiar System",
+      "asin": "B0FSTGYLG4",
+      "theme": "A kind of forgery",
+      "image": "/audiobook-familiar-system.png",
+      "audibleUrl": "https://www.amazon.com/Audible-The-Familiar-System/dp/B0FSTGYLG4"
+    },
+    {
+      "title": "Chronophage",
+      "asin": "B0FS85N18C",
+      "theme": "Quantum sock mismatch mayhem",
+      "image": "/audiobook-chronophage.png",
+      "audibleUrl": "https://www.amazon.com/Audible-Chronophage/dp/B0FS85N18C"
+    }
+  ],
+  "upcoming": [
+    {
+      "title": "Grandma's Illegal Dragon Racing Circuit",
+      "releaseStatus": "Coming in 2 weeks"
+    },
+    {
+      "title": "A Kind of Forgery",
+      "releaseStatus": "Coming in 2 weeks"
+    },
+    {
+      "title": "Quantum Sock Mismatch Mayhem",
+      "releaseStatus": "Coming in 2 weeks"
+    },
+    {
+      "title": "The Last Channel of Nana Quantum",
+      "releaseStatus": "Coming in 2 weeks"
+    }
+  ]
+}
+
