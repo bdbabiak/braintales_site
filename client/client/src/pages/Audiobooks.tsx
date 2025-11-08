@@ -178,14 +178,9 @@ export default function Audiobooks() {
                 autoPlay
                 playsInline
                 webkit-playsinline="true"
-                preload="auto"
                 muted
                 loop
-                disablePictureInPicture
-                playsInline
-                webkit-playsinline="true"
-                muted
-                loop
+                controls
                 className="w-full rounded-lg"
               >
                 <source src="/videoofmewavingandsmilingatviewer.mp4" type="video/mp4" />

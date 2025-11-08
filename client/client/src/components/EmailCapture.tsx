@@ -74,7 +74,7 @@ export function EmailCapture() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-56 sm:bottom-44 md:bottom-24 right-3 sm:right-5 z-10 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2 group"
+        className="fixed bottom-40 sm:bottom-32 md:bottom-20 right-4 sm:right-6 z-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2 group"
       >
         <BookOpen className="w-5 h-5 group-hover:rotate-12 transition-transform" />
         <span className="font-semibold">Get Free Chapter</span>
