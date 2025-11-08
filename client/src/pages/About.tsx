@@ -32,7 +32,7 @@ export default function About() {
             </Button>
           </Link>
           <Link href="/audiobooks">
-            <Button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold px-6 py-3">
+            <Button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-600 text-white font-semibold px-6 py-3">
               Listen to Audiobooks
             </Button>
           </Link>
@@ -40,7 +40,7 @@ export default function About() {
       </nav>
 
       {/* About Section */}
-      <section className="container py-12 md:py-20">
+      <section className="container pt-12 md:pt-20 pb-40">
         <div className="max-w-4xl mx-auto">
           <GradientHeading as="h1" className="text-5xl md:text-6xl mb-8">
             About the Author
@@ -129,7 +129,7 @@ export default function About() {
               </Button>
             </Link>
             <Link href="/audiobooks">
-              <Button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold px-8 py-6 text-lg">
+              <Button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-600 text-white font-semibold px-8 py-6 text-lg">
                 Listen to Audiobooks
               </Button>
             </Link>
@@ -139,4 +139,3 @@ export default function About() {
     </div>
   );
 }
-
