@@ -179,6 +179,7 @@ export default function Audiobooks() {
                 muted
                 loop
                 controls
+                playsInline
                 className="w-full rounded-lg"
               >
                 <source src="/videoofmewavingandsmilingatviewer.mp4" type="video/mp4" />
@@ -342,4 +343,3 @@ export default function Audiobooks() {
     </div>
   );
 }
-
