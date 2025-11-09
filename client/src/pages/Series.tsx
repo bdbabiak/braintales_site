@@ -255,7 +255,15 @@ export default function Series() {
                     href={series.amazonLink} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    onClick={() => Analytics.amazonClick(series.books[0]?.asin || '', series.title)}
+                    onClick={() => {
+                      // MODIFIED: Report conversion on click
+                      if (typeof (window as any).gtag === 'function') {
+                        (window as any).gtag('event', 'conversion', {
+                            'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB',
+                        });
+                      }
+                      Analytics.amazonClick(series.books[0]?.asin || '', series.title)
+                    }}
                   >
                     Get Series on Amazon
                     <ExternalLink className="w-6 h-6 ml-3" />
@@ -307,9 +315,9 @@ export default function Series() {
                         ))}
                       </ul>
                       
-                      {/* Look Inside Button */}
+                      {/* Look Inside Button (NOT TRACKED) */}
                       <AmazonLookInside
-                        amazonLink={book.amazonLink}
+                        amazonLink={series.amazonLink}
                         bookTitle={book.title}
                         asin={book.asin}
                         className="w-full mt-auto"
@@ -359,4 +367,3 @@ export default function Series() {
     </div>
   );
 }
-
