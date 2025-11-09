@@ -6,7 +6,7 @@ import { useEffect, useMemo } from "react";
 import { trpc } from "@/lib/trpc";
 import { Analytics } from "@/lib/analytics";
 import { GradientHeading, AnimatedStarRating, AnimatedCard } from "@/components/BookDisplay";
-import { GradientHeading, AnimatedStarRating } from "@/components/BookDisplay";
+// import { GradientHeading, AnimatedStarRating } from "@/components/BookDisplay"; // Duplicate import removed
 
 interface Audiobook {
   id: number;
@@ -267,6 +267,12 @@ export default function Audiobooks() {
                           target="_blank" 
                           rel="noopener noreferrer"
                           onClick={() => {
+                            // MODIFIED: Report conversion on click
+                            if (typeof (window as any).gtag === 'function') {
+                              (window as any).gtag('event', 'conversion', {
+                                  'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB',
+                              });
+                            }
                             Analytics.audibleClick(book.asin, book.title);
                             Analytics.amazonClick(book.asin, book.title);
                           }}
