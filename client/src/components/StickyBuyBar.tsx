@@ -38,6 +38,13 @@ export const StickyBuyBar: React.FC<StickyBuyBarProps> = ({
 
   const handleBuyClick = () => {
     if (currentBook) {
+      // MODIFIED: Report conversion on click
+      if (typeof (window as any).gtag === 'function') {
+        (window as any).gtag('event', 'conversion', {
+            'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB',
+        });
+      }
+
       Analytics.amazonClick(currentBook.asin, currentBook.title);
       window.open(currentBook.amazonLink, '_blank');
     }
