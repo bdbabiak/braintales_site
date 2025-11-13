@@ -87,14 +87,16 @@ export function trackEvent(eventName: string, eventData?: Record<string, any>) {
 }
 
 // --- Helper function for Google Ads Conversion ---
-// We define this once and reuse it
+// This is the NEW fix. We send *only* the country code.
+// This is a valid field and is not sensitive PII.
 const fireGoogleAdsConversion = () => {
   if (typeof (window as any).gtag === 'function') {
     (window as any).gtag('event', 'conversion', {
-        'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB', // Your "Outbound click" conversion
+        'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB',
         'user_data': {
-          'email': '',
-          'phone_number': ''
+          'address': {
+            'country': 'US' // Sending a non-PII field to satisfy the tag
+          }
         }
     });
   }
@@ -104,12 +106,12 @@ const fireGoogleAdsConversion = () => {
 export const Analytics = {
   amazonClick: (asin: string, title: string) => {
     trackEvent('Amazon Click', { asin, title });
-    fireGoogleAdsConversion(); // <-- ADDED THIS LINE
+    fireGoogleAdsConversion();
   },
   
   audibleClick: (asin: string, title: string) => {
     trackEvent('Audible Click', { asin, title });
-    fireGoogleAdsConversion(); // <-- ADDED THIS LINE
+    fireGoogleAdsConversion();
   },
 
   youtubePlay: (title: string) => trackEvent('YouTube Play', { title }),
