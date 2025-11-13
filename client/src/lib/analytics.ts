@@ -87,21 +87,15 @@ export function trackEvent(eventName: string, eventData?: Record<string, any>) {
 }
 
 // --- Helper function for Google Ads Conversion ---
-// This is the NEW, correct implementation based on your insights.
+// This is the simplest possible conversion event.
+// It sends NO user_data, which is correct because
+// you are handling the "user_data" requirement
+// with your CSS selector hack.
 const fireGoogleAdsConversion = () => {
   if (typeof (window as any).gtag === 'function') {
-    
-    // 1. This is the command you were right about.
-    // It "sets" the enhanced data, telling the tag to use it.
-    (window as any).gtag('set', 'user_data', {
-      'address': {
-        'country': 'US' // Sending a non-PII field
-      }
-    });
-
-    // 2. This sends the conversion event.
     (window as any).gtag('event', 'conversion', {
         'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB'
+        // NO user_data object at all.
     });
   }
 };
@@ -110,12 +104,12 @@ const fireGoogleAdsConversion = () => {
 export const Analytics = {
   amazonClick: (asin: string, title: string) => {
     trackEvent('Amazon Click', { asin, title });
-    fireGoogleAdsConversion();
+    fireGoogleAdsConversion(); // <-- Fires the clean conversion
   },
   
   audibleClick: (asin: string, title: string) => {
     trackEvent('Audible Click', { asin, title });
-    fireGoogleAdsConversion();
+    fireGoogleAdsConversion(); // <-- Fires the clean conversion
   },
 
   youtubePlay: (title: string) => trackEvent('YouTube Play', { title }),
