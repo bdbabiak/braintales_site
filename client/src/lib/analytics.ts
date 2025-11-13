@@ -87,17 +87,21 @@ export function trackEvent(eventName: string, eventData?: Record<string, any>) {
 }
 
 // --- Helper function for Google Ads Conversion ---
-// This is the NEW fix. We send *only* the country code.
-// This is a valid field and is not sensitive PII.
+// This is the NEW, correct implementation based on your insights.
 const fireGoogleAdsConversion = () => {
   if (typeof (window as any).gtag === 'function') {
+    
+    // 1. This is the command you were right about.
+    // It "sets" the enhanced data, telling the tag to use it.
+    (window as any).gtag('set', 'user_data', {
+      'address': {
+        'country': 'US' // Sending a non-PII field
+      }
+    });
+
+    // 2. This sends the conversion event.
     (window as any).gtag('event', 'conversion', {
-        'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB',
-        'user_data': {
-          'address': {
-            'country': 'US' // Sending a non-PII field to satisfy the tag
-          }
-        }
+        'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB'
     });
   }
 };
