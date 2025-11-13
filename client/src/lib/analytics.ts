@@ -86,11 +86,32 @@ export function trackEvent(eventName: string, eventData?: Record<string, any>) {
   }
 }
 
+// --- Helper function for Google Ads Conversion ---
+// We define this once and reuse it
+const fireGoogleAdsConversion = () => {
+  if (typeof (window as any).gtag === 'function') {
+    (window as any).gtag('event', 'conversion', {
+        'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB', // Your "Outbound click" conversion
+        'user_data': {
+          'email': '',
+          'phone_number': ''
+        }
+    });
+  }
+};
+
 // Conversion tracking helpers
 export const Analytics = {
-  amazonClick: (asin: string, title: string) => trackEvent('Amazon Click', { asin, title }),
-  audibleClick: (asin: string, title: string) => trackEvent('Audible Click', { asin, title }),
+  amazonClick: (asin: string, title: string) => {
+    trackEvent('Amazon Click', { asin, title });
+    fireGoogleAdsConversion(); // <-- ADDED THIS LINE
+  },
+  
+  audibleClick: (asin: string, title: string) => {
+    trackEvent('Audible Click', { asin, title });
+    fireGoogleAdsConversion(); // <-- ADDED THIS LINE
+  },
+
   youtubePlay: (title: string) => trackEvent('YouTube Play', { title }),
   tiktokShare: (title: string) => trackEvent('TikTok Share', { title }),
 };
-
