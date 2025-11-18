@@ -1,39 +1,31 @@
 // Analytics tracking utility
-// Cleaned version: No Google Ads, No Manus/Umami, No Proxy
+// ZERO TRACKING VERSION
+// All functions are empty no-ops to preserve application structure without tracking.
 
 export function trackPageView(url?: string) {
-  // Safe check for standard Plausible (if script is ever present)
-  try {
-    if (typeof window !== 'undefined' && (window as any).plausible) {
-      (window as any).plausible('pageview');
-    }
-  } catch (error) {
-    // Silently fail
-  }
+  // No-op
 }
 
 export function trackEvent(eventName: string, eventData?: Record<string, any>) {
-  // Safe check for standard Plausible (if script is ever present)
-  try {
-    if (typeof window !== 'undefined' && (window as any).plausible) {
-      (window as any).plausible(eventName, eventData ? { props: eventData } : undefined);
-    }
-  } catch (error) {
-    // Silently fail
-  }
+  // No-op
 }
 
 // Conversion tracking helpers
-// These now only trigger the internal event (safe no-op if no analytics script is loaded)
+// These are kept so the "Get on Amazon" buttons don't throw errors when clicked.
 export const Analytics = {
   amazonClick: (asin: string, title: string) => {
-    trackEvent('Amazon Click', { asin, title });
+    // No-op
   },
   
   audibleClick: (asin: string, title: string) => {
-    trackEvent('Audible Click', { asin, title });
+    // No-op
   },
 
-  youtubePlay: (title: string) => trackEvent('YouTube Play', { title }),
-  tiktokShare: (title: string) => trackEvent('TikTok Share', { title }),
+  youtubePlay: (title: string) => {
+    // No-op
+  },
+  
+  tiktokShare: (title: string) => {
+    // No-op
+  },
 };
