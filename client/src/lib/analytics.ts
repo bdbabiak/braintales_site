@@ -1,20 +1,31 @@
 // Analytics tracking utility
-// ZERO TRACKING VERSION
-// All functions are empty no-ops to preserve application structure without tracking.
+// TRACKING VERSION
+// Functions updated to fire Meta Pixel events.
 
 export function trackPageView(url?: string) {
-  // No-op
+  if ((window as any).fbq) {
+    (window as any).fbq('track', 'PageView');
+  }
 }
 
 export function trackEvent(eventName: string, eventData?: Record<string, any>) {
-  // No-op
+  if ((window as any).fbq) {
+    (window as any).fbq('trackCustom', eventName, eventData);
+  }
 }
 
 // Conversion tracking helpers
 // These are kept so the "Get on Amazon" buttons don't throw errors when clicked.
 export const Analytics = {
   amazonClick: (asin: string, title: string) => {
-    // No-op
+    // Fire Meta Pixel Event
+    if ((window as any).fbq) {
+      (window as any).fbq('trackCustom', 'AmazonClick', {
+        content_name: title,
+        content_id: asin,
+        platform: 'Amazon'
+      });
+    }
   },
   
   audibleClick: (asin: string, title: string) => {
