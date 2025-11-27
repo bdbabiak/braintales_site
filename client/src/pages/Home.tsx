@@ -376,10 +376,19 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2"
                 onClick={() => {
-                  // MODIFIED: Report conversion on click
+                  // EXISTING: Google Ads Conversion
                   if (typeof (window as any).gtag === 'function') {
                     (window as any).gtag('event', 'conversion', {
                         'send_to': 'AW-17609588022/AtoCCI22g70bELb688xB',
+                    });
+                  }
+                  
+                  // ADDED: Meta Pixel Conversion
+                  if (typeof (window as any).fbq === 'function') {
+                    (window as any).fbq('trackCustom', 'AmazonClick', {
+                      content_name: book.title,
+                      content_id: book.asin,
+                      platform: 'Amazon'
                     });
                   }
                 }}
