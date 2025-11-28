@@ -383,9 +383,18 @@ export default function Home() {
                     });
                   }
                   
-                  // ADDED: Meta Pixel Conversion
+                  // Meta Pixel Conversion
                   if (typeof (window as any).fbq === 'function') {
                     (window as any).fbq('trackCustom', 'AmazonClick', {
+                      content_name: book.title,
+                      content_id: book.asin,
+                      platform: 'Amazon'
+                    });
+                  }
+
+                  // ADDED: Signals Gateway Pixel Conversion
+                  if (typeof (window as any).cbq === 'function') {
+                    (window as any).cbq('trackCustom', 'AmazonClick', {
                       content_name: book.title,
                       content_id: book.asin,
                       platform: 'Amazon'
